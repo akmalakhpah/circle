@@ -68,7 +68,7 @@
                                         <td><p>@isset($p->height) {{ $p->height }} @endisset</p></td>
                                     </tr>
                                     <tr>
-                                        <td><p>Weight <span class="help">(pounds)</span></p></td>
+                                        <td><p>Weight <span class="help">(kg)</span></p></td>
                                         <td><p>@isset($p->weight) {{ $p->weight }} @endisset</p></td>
                                     </tr>
                                     <tr>

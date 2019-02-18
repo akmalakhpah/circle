@@ -63,7 +63,7 @@
                                         <input type="text" name="height" value="@isset($person_details->height){{ $person_details->height }}@endisset" placeholder="000">
                                     </div>
                                     <div class="field">
-                                        <label>Weight <span class="help">(pounds)</span></label>
+                                        <label>Weight <span class="help">(kg)</span></label>
                                         <input type="text" name="weight" value="@isset($person_details->weight){{ $person_details->weight }}@endisset" placeholder="000">
                                     </div>
                                 </div>

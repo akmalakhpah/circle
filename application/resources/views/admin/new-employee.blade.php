@@ -61,7 +61,7 @@
                                     <input type="number" name="height" value="" placeholder="000">
                                 </div>
                                 <div class="field">
-                                    <label>Weight <span class="help">(pounds)</span></label>
+                                    <label>Weight <span class="help">(kg)</span></label>
                                     <input type="number" name="weight" value="" placeholder="000">
                                 </div>
                             </div>

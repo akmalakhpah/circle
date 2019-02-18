@@ -63,7 +63,7 @@
                                         <input type="text" name="height" value="@isset($person_details->height){{ $person_details->height }}@endisset" placeholder="000">
                                     </div>
                                     <div class="field">
-                                        <label>Weight <span class="help">(pounds)</span></label>
+                                        <label>Weight <span class="help">(kg)</span></label>
                                         <input type="text" name="weight" value="@isset($person_details->weight){{ $person_details->weight }}@endisset" placeholder="000">
                                     </div>
                                 </div>
@@ -81,11 +81,11 @@
                                 <div class="two fields">
                                 <div class="field">
                                     <label>Age</label>
-                                    <input type="text" name="age" value="@isset($person_details->age){{ $person_details->age }}@endisset" placeholder="00">
+                                    <input type="text" name="age" class="age" value="@isset($person_details->age){{ $person_details->age }}@endisset" placeholder="00">
                                 </div>
                                 <div class="field">
                                     <label>Date of Birth</label>
-                                    <input type="text" name="birthday" value="@isset($person_details->birthday){{ $person_details->birthday }}@endisset" class="airdatepicker" placeholder="Date">
+                                    <input type="text" name="birthday" value="@isset($person_details->birthday){{ $person_details->birthday }}@endisset" class="birthdaypicker" placeholder="Date">
                                 </div>
                                 </div>
                                 <div class="field">
@@ -119,5 +119,26 @@
     <script src="{{ asset('/assets/vendor/air-datepicker/dist/js/i18n/datepicker.en.js') }}"></script>
     <script type="text/javascript">
         $('.airdatepicker').datepicker({ language: 'en', dateFormat: 'yyyy-mm-dd' });
+
+        $('.birthdaypicker').datepicker({
+          language: 'en', dateFormat: 'yyyy-mm-dd',
+          onSelect: function(dateText) {
+            var age = calculateAge(dateText);
+            $('.age').val(age);
+          }
+        });
+
+        $('.birthdaypicker').change(function() {
+            var age = calculateAge($('.birthdaypicker').val());
+            $('.age').val(age);
+        });
+
+        function calculateAge(dob){
+            dob = new Date(dob);
+            var today = new Date();
+            var age = Math.floor((today-dob) / (365.25 * 24 * 60 * 60 * 1000));
+            if(age < 0) age = 0;
+            return age; 
+        }
     </script>
     @endsection
