@@ -42,6 +42,24 @@
                                             <td>ID No.</td>
                                             <td><span class="p_value">@isset($c->idno) {{ $c->idno }} @endisset</span></td>
                                         </tr>
+
+                                        <?php
+                                        $joined = null;
+                                        if(isset($c->startdate)){
+                                            $datetime1 = new DateTime($c->startdate);
+                                            $datetime2 = new DateTime('now');;
+                                            $interval = $datetime1->diff($datetime2);
+                                            $joined = $interval->format('%y years %m months ago');
+                                        }
+                                        ?>
+
+                                        @if($joined)
+                                        <tr>
+                                            <td>Joined</td>
+                                            <td><span class="p_value">@isset($joined) {{ $joined }} @endisset</span></td>
+                                        </tr>
+                                        @endif
+
                                     </tbody>
                                 </table>
                             </p>
