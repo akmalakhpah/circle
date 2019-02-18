@@ -1,2 +1,2 @@
 # circle
-My Circle Performance Management Software
+Staff OKR monitoring tools
