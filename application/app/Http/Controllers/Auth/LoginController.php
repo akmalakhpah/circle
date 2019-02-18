@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 use Auth;
 use Socialite;
+use App\Classes\table;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
@@ -90,27 +91,47 @@ class LoginController extends Controller
         try {
             $user = Socialite::driver('google')->user();
         } catch (\Exception $e) {
-            return redirect('/login');
+            return redirect('login');
         }
         // only allow people with @company.com to login
         if(explode("@", $user->email)[1] !== env('GOOGLE_ALLOWEDDOMAIN')){
-            return redirect()->to('/');
+            return redirect('login');
         }
+
         // check if they're an existing user
-        $existingUser = User::where('email', $user->email)->first();
+        $existingUser = table::users('email', $user->email)->first();
         if($existingUser){
             // log them in
-            auth()->login($existingUser, true);
+            Auth::login($existingUser, true);
         } else {
-            // create a new user
-            $newUser                  = new User;
-            $newUser->name            = $user->name;
-            $newUser->email           = $user->email;
-            $newUser->role_id         = 5;
-            $newUser->acc_type        = 1;
-            $newUser->status          = 1;
-            $newUser->save();
-            auth()->login($newUser, true);
+
+            // check employee data
+            $existingEmployee = table::people()
+                ->select('tbl_people.id','tbl_company_data.idno','tbl_people.firstname','tbl_people.mi','tbl_people.lastname')
+                ->join('tbl_company_data', 'tbl_people.id', '=', 'tbl_company_data.reference')
+                ->where('tbl_people.emailaddress', $user->email)
+                ->orWhere('tbl_company_data.companyemail', $user->email)
+                ->first();
+
+            if($existingEmployee){
+                $fullname = mb_strtoupper($existingEmployee->lastname.', '.$existingEmployee->firstname.' '.$existingEmployee->mi);
+
+                // create a new user
+                $newUser                  = new table::users();
+                $newUser->reference       = $existingEmployee->id;
+                $newUser->idno            = $existingEmployee->idno;
+                $newUser->name            = $fullname;
+                $newUser->email           = $user->email;
+                $newUser->role_id         = 5;
+                $newUser->acc_type        = 1;
+                $newUser->status          = 1;
+                $newUser->save();
+                Auth::login($newUser, true);
+
+            }
+            else {
+                eturn redirect('login');
+            }
         }
         return redirect()->to('/dashboard');
     }
