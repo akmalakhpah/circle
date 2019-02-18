@@ -102,7 +102,7 @@ class LoginController extends Controller
         $existingUser = table::users('email', $user->email)->first();
         if($existingUser){
             // log them in
-            Auth::login($existingUser, true);
+            Auth::loginUsingId($existingUser->id, true);
         } else {
 
             // check employee data
@@ -129,7 +129,7 @@ class LoginController extends Controller
                 ]);
 
                 $existingUser = table::users('email', $user->email)->first();
-                Auth::login($existingUser, true);
+                Auth::loginUsingId($existingUser->id, true);
             }
             else {
                 return redirect('login');
