@@ -99,8 +99,7 @@ class LoginController extends Controller
         }
 
         // check if they're an existing user
-        $existingUser = table::users('email', $user->email)->first();
-        dd($user->email);
+        $existingUser = table::users()->where('email', $user->email)->first();
         if($existingUser){
             // log them in
             Auth::loginUsingId($existingUser->id, true);
@@ -129,7 +128,7 @@ class LoginController extends Controller
                     ],
                 ]);
 
-                $existingUser = table::users('email', $user->email)->first();
+                $existingUser = table::users()->where('email', $user->email)->first();
                 Auth::loginUsingId($existingUser->id, true);
             }
             else {
