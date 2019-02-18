@@ -116,24 +116,34 @@ class LoginController extends Controller
             if($existingEmployee){
                 $fullname = mb_strtoupper($existingEmployee->lastname.', '.$existingEmployee->firstname.' '.$existingEmployee->mi);
 
-                // create a new user
-                $newUser                  = new table::users();
-                $newUser->reference       = $existingEmployee->id;
-                $newUser->idno            = $existingEmployee->idno;
-                $newUser->name            = $fullname;
-                $newUser->email           = $user->email;
-                $newUser->role_id         = 5;
-                $newUser->acc_type        = 1;
-                $newUser->status          = 1;
-                $newUser->save();
-                Auth::login($newUser, true);
+                table::users()->insert([
+                    [
+                        'reference' => $existingEmployee->id,
+                        'idno' => $existingEmployee->idno,
+                        'name' => $fullname,
+                        'email' => $user->email,
+                        'role_id' => 5,
+                        'acc_type' => 1,
+                        'status' => 1,
+                    ],
+                ]);
 
+                $existingUser = table::users('email', $user->email)->first();
+                Auth::login($existingUser, true);
             }
             else {
-                eturn redirect('login');
+                return redirect('login');
             }
         }
-        return redirect()->to('/dashboard');
+
+        if ($existingUser->acc_type == '1') {
+            return redirect('personal/dashboard');
+        } 
+        if($existingUser->acc_type == '2') {
+            return redirect('dashboard');
+        } 
+        return redirect('login');
+
     }
 
 }
