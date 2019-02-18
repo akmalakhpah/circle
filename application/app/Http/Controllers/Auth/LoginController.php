@@ -100,7 +100,7 @@ class LoginController extends Controller
 
         // check if they're an existing user
         $existingUser = table::users('email', $user->email)->first();
-        dd($user);
+        dd($user->email);
         if($existingUser){
             // log them in
             Auth::loginUsingId($existingUser->id, true);
