@@ -108,6 +108,16 @@
         });
     });
 
+    window.chartColors = {
+        red: 'rgb(255, 99, 132)',
+        orange: 'rgb(255, 159, 64)',
+        yellow: 'rgb(255, 205, 86)',
+        green: 'rgb(75, 192, 192)',
+        blue: 'rgb(54, 162, 235)',
+        purple: 'rgb(153, 102, 255)',
+        grey: 'rgb(201, 203, 207)'
+    };
+
     // chart by company
     var company = document.getElementById("company");
     var myChart0 = new Chart(company, {
@@ -118,7 +128,15 @@
             ],
             datasets: [{
                 data: [ @isset($cc) {{ $cc }} @endisset ],
-                backgroundColor: ["#009688","#795548","#673AB7","#2196F3","#6da252","#f39c12","#F44336"],
+                backgroundColor: [
+                    window.chartColors.green,
+                    window.chartColors.blue,
+                    window.chartColors.purple,
+                    window.chartColors.red,
+                    window.chartColors.orange,
+                    window.chartColors.yellow,
+                    window.chartColors.gray,
+                ],
             }]
         },
         options: {
@@ -152,13 +170,25 @@
             ],
             datasets: [{
                 data: [ @isset($dc) {{ $dc }} @endisset ],
-                backgroundColor: ["#673AB7","#2196F3","#6da252","#f39c12","#F44336","#009688","#795548"],
+                backgroundColor: [
+                    window.chartColors.red,
+                    window.chartColors.orange,
+                    window.chartColors.yellow,
+                    window.chartColors.green,
+                    window.chartColors.blue,
+                    window.chartColors.purple,
+                    window.chartColors.red,
+                    window.chartColors.orange,
+                    window.chartColors.yellow,
+                    window.chartColors.green,
+                    window.chartColors.blue,
+                    window.chartColors.purple],
             }]
         },
         options: {
             responsive: true,
             maintainAspectRatio: true,
-            legend: {display: true,fullWidth: true,position: 'right',},
+            legend: {display: true,fullWidth: false,position: 'right',},
             tooltips: {
                 callbacks: {
                     label: function(tooltipItem, data) {
@@ -186,7 +216,11 @@
             ],
             datasets: [{
                 data: [ @isset($gc) {{ $gc }} @endisset ],
-                backgroundColor: ["#6da252","#f39c12","#F44336","#009688","#673AB7","#2196F3","#795548"],
+                backgroundColor: [
+                    window.chartColors.blue,
+                    window.chartColors.red,
+                    window.chartColors.grey,
+                ],
             }]
         },
         options: {
@@ -246,7 +280,15 @@
             ],
             datasets: [{
                 data: [ @isset($cg) {{ $cg }} @endisset ],
-                backgroundColor: ["#F44336","#2196F3","#795548","#6da252","#f39c12","#009688","#673AB7"],
+                backgroundColor: [
+                    window.chartColors.yellow,
+                    window.chartColors.orange,
+                    window.chartColors.red,
+                    window.chartColors.purple,
+                    window.chartColors.blue,
+                    window.chartColors.green,
+                    window.chartColors.gray,
+                ],
             }]
         },
         options: {
