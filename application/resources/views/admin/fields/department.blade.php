@@ -20,11 +20,24 @@
                     
                     <form role="form" action="{{ url('fields/department/add') }}" class="ui form" method="post" accept-charset="utf-8">
                         {{ csrf_field() }}
+
+                        <div class="field">
+                            <label>Company</label>
+                            <select name="company" class="ui search dropdown getcompcode">
+                                <option value="">Select Company</option>
+                                @isset($c)
+                                    @foreach ($c as $comp)
+                                        <option value="{{ $comp->company }}" data-id="{{ $comp->id }}"> {{ $comp->company }}</option>
+                                    @endforeach
+                                @endisset
+                            </select>
+                        </div>
                         <div class="field">
                             <label>Department Name <span class="help">e.g. "Accounting"</span></label>
                             <input class="uppercase" name="department" value="" required="" type="text">
                         </div>
                         <div class="actions">
+                            <input type="hidden" name="comp_code" value="">
                             <button type="submit" class="ui positivex blue button small"><i class="ui icon check"></i> Save</button>
                         </div>
                     </form>
@@ -40,6 +53,7 @@
                     <thead>
                         <tr>
                             <th>Department</th>
+                            <th>Company</th>
                             <th></th>
                         </tr>
                     </thead>
@@ -48,6 +62,15 @@
                         @foreach ($data as $department)
                         <tr>
                             <td>{{ $department->department }}</td>
+                            <td>
+                                @isset($c)
+                                    @foreach($c as $comp)
+                                        @if($department->comp_code == $comp->id) 
+                                            {{ $comp->company }} 
+                                        @endif
+                                    @endforeach
+                                @endisset
+                            </td>
                             <td class="align-right"><a href="{{ url('fields/department/delete/'.$department->id) }}" class="ui circular basic icon button tiny"><i class="icon trash alternate outline"></i></a></td>
                         </tr>
                         @endforeach
@@ -67,6 +90,11 @@
         $(document).ready(function() {
             $('#dataTables-example').DataTable({responsive: true,searching: true,ordering: true,info: true,bLengthChange: false,});
         });
+        $('.ui.dropdown.getcompcode').dropdown({ onChange: function(value, text, $selectedItem) {
+            $('select[name="company"] option').each(function() {
+                if($(this).val()==value) {var id = $(this).attr('data-id');$('input[name="comp_code"]').val(id);};
+            });
+        }});
         function validateFile() {
             var f = document.getElementById("csvfile").value;
             var d = f.lastIndexOf(".") + 1;

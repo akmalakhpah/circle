@@ -78,7 +78,8 @@ class FieldsController extends Controller
       }
 
       $data = table::department()->get();
-      return view('admin.fields.department', compact('data'));
+      $c = table::company()->get();
+      return view('admin.fields.department', compact('data','c'));
     }
 
     public function addDepartment(Request $request)
@@ -89,13 +90,17 @@ class FieldsController extends Controller
       }
 
       $department = mb_strtoupper($request->department);
+      $comp_code = $request->comp_code;
 
-      if ($department == null) {
+      if ($department == null || $comp_code == null) {
         return redirect('fields/departments')->with('error', 'Whoops! Please fill the form completely!');
       }
 
       table::department()->insert([
-        ['department' => $department],
+        [
+          'department' => $department,
+          'comp_code' => $comp_code
+        ],
       ]);
 
       return redirect('fields/department')->with('success','New Department has been saved.');

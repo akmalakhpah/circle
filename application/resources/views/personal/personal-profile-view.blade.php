@@ -23,7 +23,7 @@
                             @if($profile_photo != null)
                                 <img class="avatar border-white" src="{{ asset('/assets/faces/'.$profile_photo) }}" alt="profile photo"/>
                             @else
-                                <img class="avatar border-white" src="{{ asset('/assets/images/faces/default_user.jpg') }}" alt="profile photo"/>
+                                <img class="avatar border-white" src="{{ asset('/assets/images/faces/default_user.png') }}" alt="profile photo"/>
                             @endif
                             </div>
                             <p class="description text-center">

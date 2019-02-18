@@ -1063,12 +1063,12 @@ h5,
 /* adjustments */
 
 .info-box-icon {
-    height: 90px;
+    height: 105px;
     width: 90px;
 }
 
 .info-box-icon i {
-    margin-top: 0;
+    margin-top: 10px;
 }
 
 .info-box-content {

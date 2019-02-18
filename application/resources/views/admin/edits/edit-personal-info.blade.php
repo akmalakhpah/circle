@@ -81,11 +81,11 @@
                                 <div class="two fields">
                                     <div class="field">
                                         <label>Age</label>
-                                        <input type="text" name="age" value="@isset($person_details->age){{ $person_details->age }}@endisset" placeholder="00">
+                                        <input type="text" name="age" class="age" value="@isset($person_details->age){{ $person_details->age }}@endisset" placeholder="00">
                                     </div>
                                     <div class="field">
                                         <label>Date of Birth</label>
-                                        <input type="text" name="birthday" value="@isset($person_details->birthday){{ $person_details->birthday }}@endisset" class="airdatepicker" placeholder="Date">
+                                        <input type="text" name="birthday" value="@isset($person_details->birthday){{ $person_details->birthday }}@endisset" class="birthdaypicker" placeholder="Date" onchange="calculateAge()">
                                     </div>
                                 </div>
                                 <div class="field">
@@ -115,7 +115,7 @@
                                 <h4 class="ui dividing header">Designation</h4>
                                 <div class="field">
                                     <label>Company</label>
-                                    <select name="company" class="ui search dropdown uppercase">
+                                    <select name="company" class="ui search dropdown uppercase company">
                                         <option value="">Select Company</option>
                                         @isset($company)
                                         @foreach ($company as $data)
@@ -126,14 +126,24 @@
                                 </div>
                                 <div class="field">
                                     <label>Department</label>
-                                    <select name="department" class="ui search dropdown uppercase department">
-                                        <option value="">Select Department</option>
+                                    <div class="ui search dropdown selection uppercase department">
+                                        <input type="hidden" name="department" value="{{$company_details->department}}">
+                                        <i class="dropdown icon"></i>
+                                        <div class="text">{{$company_details->department}}</div>
+                                        <div class="menu">
                                         @isset($department)
-                                        @foreach ($department as $data)
-                                            <option value="{{ $data->department }}" @if($data->department == $company_details->department) selected @endif> {{ $data->department }}</option>
-                                        @endforeach
+                                        @isset($company)
+                                            @foreach ($department as $data)
+                                                @foreach ($company as $comp)
+                                                    @if($comp->id == $data->comp_code)
+                                                        <div class="item" data-value="{{ $data->department }}" data-comp="{{ $comp->company }}" @if($data->department == $company_details->department) selected @endif>{{ $data->department }}</div>
+                                                    @endif
+                                                @endforeach
+                                            @endforeach
                                         @endisset
-                                    </select>
+                                        @endisset
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="field">
                                     <label>Job Title / Position</label>
@@ -181,6 +191,7 @@
                                     <select name="employmenttype" class="ui dropdown uppercase">
                                         <option value="">Select Type</option>
                                         <option value="Regular" @isset($person_details->employmenttype) @if($person_details->employmenttype == 'Regular') selected @endif @endisset>Regular</option>
+                                        <option value="Contract" @isset($person_details->employmenttype) @if($person_details->employmenttype == 'Contract') selected @endif @endisset>Contract</option>
                                         <option value="Trainee" @isset($person_details->employmenttype) @if($person_details->employmenttype == 'Trainee') selected @endif @endisset>Trainee</option>
                                     </select>
                                 </div>
@@ -223,6 +234,30 @@
     <script src="{{ asset('/assets/vendor/air-datepicker/dist/js/i18n/datepicker.en.js') }}"></script>
     <script type="text/javascript">
         $('.airdatepicker').datepicker({ language: 'en', dateFormat: 'yyyy-mm-dd' });
+
+        $('.birthdaypicker').datepicker({
+          language: 'en', dateFormat: 'yyyy-mm-dd',
+          onSelect: function(dateText) {
+            var age = calculateAge(dateText);
+            $('.age').val(age);
+          }
+        });
+
+        $('.birthdaypicker').change(function() {
+            var age = calculateAge($('.birthdaypicker').val());
+            $('.age').val(age);
+        });
+
+
+        $('.ui.dropdown.company').dropdown({ onChange: function(value, text, $selectedItem) {
+            $('.department .menu .item').addClass('hide');
+            $('.department .text').text('');
+            $('input[name="department"]').val('');
+            $('.department .menu .item').each(function() {
+                var comp = $(this).attr('data-comp');
+                if(comp == value) {$(this).removeClass('hide');};
+            });
+        }});
         $('.ui.dropdown.department').dropdown({ onChange: function(value, text, $selectedItem) {
             $('.jobposition .menu .item').addClass('hide');
             $('.jobposition .text').text('');
@@ -244,6 +279,14 @@
                 message: "Please upload only jpg/jpeg and png image formats."},
                 {type: 'danger',timer: 400});
             }
+        }
+
+        function calculateAge(dob){
+            dob = new Date(dob);
+            var today = new Date();
+            var age = Math.floor((today-dob) / (365.25 * 24 * 60 * 60 * 1000));
+            if(age < 0) age = 0;
+            return age; 
         }
 
         var selected = "@isset($company_details->leaveprivilege){{ $company_details->leaveprivilege }}@endisset";

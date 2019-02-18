@@ -32,6 +32,10 @@
                                             <td>@isset($emp_typeR) {{ $emp_typeR }} @endisset</td>
                                         </tr>
                                         <tr>
+                                            <td>Contract</td>
+                                            <td>@isset($emp_typeC) {{ $emp_typeC }} @endisset</td>
+                                        </tr>
+                                        <tr>
                                             <td>Trainee</td>
                                             <td>@isset($emp_typeT) {{ $emp_typeT }} @endisset</td>
                                         </tr>

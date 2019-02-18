@@ -80,11 +80,11 @@
                             <div class="two fields">
                                 <div class="field">
                                     <label>Age</label>
-                                    <input type="number" name="age" value="" placeholder="00">
+                                    <input type="number" name="age" value="" class="age" placeholder="00">
                                 </div>
                                 <div class="field">
                                     <label>Date of Birth</label>
-                                    <input type="text" name="birthday" value="" class="airdatepicker" data-position="top right" placeholder="Date"> 
+                                    <input type="text" name="birthday" value="" class="birthdaypicker" data-position="top right" placeholder="Date"> 
                                 </div>
                             </div>
                             <div class="field">
@@ -114,7 +114,7 @@
                             <h4 class="ui dividing header">Designation</h4>
                             <div class="field">
                                 <label>Company</label>
-                                <select name="company" class="ui search dropdown uppercase">
+                                <select name="company" class="ui search dropdown uppercase company">
                                     <option value="">Select Company</option>
                                     @isset($company)
                                     @foreach ($company as $data)
@@ -125,14 +125,24 @@
                             </div>
                             <div class="field">
                                 <label>Department</label>
-                                <select name="department" class="ui search dropdown uppercase department">
-                                    <option value="">Select Department</option>
+                                <div class="ui search dropdown selection uppercase department">
+                                    <input type="hidden" name="department">
+                                    <i class="dropdown icon" tabindex="1"></i>
+                                    <div class="default text">Select Department</div>
+                                    <div class="menu">
                                     @isset($department)
-                                    @foreach ($department as $data)
-                                        <option value="{{ $data->department }}"> {{ $data->department }}</option>
-                                    @endforeach
+                                    @isset($company)
+                                        @foreach ($department as $data)
+                                            @foreach ($company as $comp)
+                                                @if($comp->id == $data->comp_code)
+                                                    <div class="item" data-value="{{ $data->department }}" data-comp="{{ $comp->company }}">{{ $data->department }}</div>
+                                                @endif
+                                            @endforeach
+                                        @endforeach
                                     @endisset
-                                </select>
+                                    @endisset
+                                    </div>
+                                </div>
                             </div>
                             <div class="field">
                                 <label>Job Title / Position</label>
@@ -181,6 +191,7 @@
                                 <select name="employmenttype" class="ui dropdown uppercase">
                                     <option value="">Select Type</option>
                                     <option value="Regular">Regular</option>
+                                    <option value="Contract">Contract</option>
                                     <option value="Trainee">Trainee</option>
                                 </select>
                             </div>
@@ -220,29 +231,60 @@
     <script src="{{ asset('/assets/vendor/air-datepicker/dist/js/datepicker.min.js') }}"></script>
     <script src="{{ asset('/assets/vendor/air-datepicker/dist/js/i18n/datepicker.en.js') }}"></script>
     <script type="text/javascript">
-    $('.airdatepicker').datepicker({ language: 'en', dateFormat: 'yyyy-mm-dd', autoClose: true });
-    
-    $('.ui.dropdown.department').dropdown({ onChange: function(value, text, $selectedItem) {
-        $('.jobposition .menu .item').addClass('hide disabled');
-        $('.jobposition .text').text('');
-        $('input[name="jobposition"]').val('');
-        $('.jobposition .menu .item').each(function() {
-            var dept = $(this).attr('data-dept');
-            if(dept == value) {$(this).removeClass('hide disabled');};
-        });
-    }});
+        $('.airdatepicker').datepicker({ language: 'en', dateFormat: 'yyyy-mm-dd', autoClose: true });
 
-    function validateFile() {
-        var f = document.getElementById("imagefile").value;
-        var d = f.lastIndexOf(".") + 1;
-        var ext = f.substr(d, f.length).toLowerCase();
-        if (ext == "jpg" || ext == "jpeg" || ext == "png") { } else {
-            document.getElementById("imagefile").value="";
-            $.notify({
-            icon: 'ui icon times',
-            message: "Please upload only jpg/jpeg and png image formats."},
-            {type: 'danger',timer: 400});
+        $('.birthdaypicker').datepicker({
+          language: 'en', dateFormat: 'yyyy-mm-dd',
+          onSelect: function(dateText) {
+            var age = calculateAge(dateText);
+            $('.age').val(age);
+          }
+        });
+
+        $('.birthdaypicker').change(function() {
+            var age = calculateAge($('.birthdaypicker').val());
+            $('.age').val(age);
+        });
+        
+        $('.ui.dropdown.company').dropdown({ onChange: function(value, text, $selectedItem) {
+            $('.department .menu .item').addClass('hide disabled');
+            $('.department .text').text('');
+            $('input[name="department"]').val('');
+            $('.department .menu .item').each(function() {
+                var comp = $(this).attr('data-comp');
+                if(comp == value) {$(this).removeClass('hide disabled');};
+            });
+        }});
+
+        $('.ui.dropdown.department').dropdown({ onChange: function(value, text, $selectedItem) {
+            $('.jobposition .menu .item').addClass('hide disabled');
+            $('.jobposition .text').text('');
+            $('input[name="jobposition"]').val('');
+            $('.jobposition .menu .item').each(function() {
+                var dept = $(this).attr('data-dept');
+                if(dept == value) {$(this).removeClass('hide disabled');};
+            });
+        }});
+
+        function validateFile() {
+            var f = document.getElementById("imagefile").value;
+            var d = f.lastIndexOf(".") + 1;
+            var ext = f.substr(d, f.length).toLowerCase();
+            if (ext == "jpg" || ext == "jpeg" || ext == "png") { } else {
+                document.getElementById("imagefile").value="";
+                $.notify({
+                icon: 'ui icon times',
+                message: "Please upload only jpg/jpeg and png image formats."},
+                {type: 'danger',timer: 400});
+            }
         }
-    }
+
+        function calculateAge(dob){
+            dob = new Date(dob);
+            var today = new Date();
+            var age = Math.floor((today-dob) / (365.25 * 24 * 60 * 60 * 1000));
+            if(age < 0) age = 0;
+            return age; 
+        }
     </script>
     @endsection

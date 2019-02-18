@@ -28,6 +28,11 @@ class EmployeesController extends Controller
 		->where('employmentstatus', 'Active')
 		->count();
 
+		$emp_typeC = table::people()
+		->where('employmenttype', 'Contract')
+		->where('employmentstatus', 'Active')
+		->count();
+
 		$emp_typeT = table::people()
 		->where('employmenttype', 'Trainee')
 		->where('employmentstatus', 'Active')
@@ -61,7 +66,7 @@ class EmployeesController extends Controller
 			$number1 = null;
 		}
 		
-	    return view('admin.employees', compact('data', 'emp_typeR', 'emp_typeT', 'emp_genderM', 'emp_genderR', 'emp_allActive', 'emp_file', 'emp_allArchive'));
+	    return view('admin.employees', compact('data', 'emp_typeR', 'emp_typeC', 'emp_typeT', 'emp_genderM', 'emp_genderR', 'emp_allActive', 'emp_file', 'emp_allArchive'));
 	}
 
 	public function new() {

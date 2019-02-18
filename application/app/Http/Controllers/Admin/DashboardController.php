@@ -44,6 +44,11 @@ class DashboardController extends Controller
         ->where('employmentstatus', 'Active')
         ->count();
 
+        $emp_typeC = table::people()
+        ->where('employmenttype', 'Contract')
+        ->where('employmentstatus', 'Active')
+        ->count();
+
 		$emp_typeT = table::people()
         ->where('employmenttype', 'Trainee')
         ->where('employmentstatus', 'Active')
@@ -77,6 +82,7 @@ class DashboardController extends Controller
         return view('admin.dashboard', 
                     compact(
                             'emp_typeR', 
+                            'emp_typeC',
                             'emp_typeT', 
                             'emp_allActive', 
                             'emp_leaves_pending', 
