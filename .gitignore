@@ -20,3 +20,6 @@ Homestead.json
 .rocketeer/
 
 .DS_Store
+
+# Include vendor assests files 
+!assets/vendor/
