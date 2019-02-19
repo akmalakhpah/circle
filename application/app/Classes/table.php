@@ -102,6 +102,11 @@ Class table {
     $asanajobs = DB::table('tbl_asana_jobs');
     return $asanajobs;
   }
+
+  public static function asana_summary() {
+    $asanasummary = DB::table('tbl_asana_summary');
+    return $asanasummary;
+  }
 	   
 	public static function settings() {
     $settings = DB::table('settings');
