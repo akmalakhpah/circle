@@ -96,12 +96,14 @@
                         <p>Manage Leave</p>
                     </a>
                 </li>
+
                 <li class="">
                     <a href="{{ url('reports') }}">
                         <i class="ui icon chart bar outline"></i>
                         <p>Reports</p>
                     </a>
                 </li>
+
                 <li>
                     <a href="{{ url('users') }}">
                         <i class="ui icon user outline"></i>
@@ -109,8 +111,15 @@
                     </a>
                 </li>
                 <li>
+                    <a href="{{ url('asana-users') }}">
+                        <i class="ui icon user circle outline"></i>
+                        <p>Asana Users</p>
+                    </a>
+                </li>
+
+                <li>
                     <a href="{{ url('settings') }}">
-                        <i class="ui icon cog"></i>
+                        <i class="ui icon toggle off"></i>
                         <p>Settings</p>
                     </a>
                 </li>
@@ -133,12 +142,12 @@
                                     <i class="dropdown icon"></i>
                                     <div class="menu" tabindex="-1">
                                       <a href="{{ url('employees/new') }}" class="item"><i class="ui icon user plus"></i> Add Employee</a>
-                                      <a href="{{ url('clock') }}" target="_blank" class="item"><i class="ui icon clock outline"></i> Clock In/Out</a>
+                                      <a href="{{ url('clock') }}" target="_blank" class="item"><i class="ui icon clock"></i> Clock In/Out</a>
                                       <div class="divider"></div>
-                                      <a href="{{ url('fields/company') }}" class="item"><i class="ui icon university"></i> Company</a>
-                                      <a href="{{ url('fields/department') }}" class="item"><i class="ui icon cubes"></i> Department</a>
-                                      <a href="{{ url('fields/jobtitle') }}" class="item"><i class="ui icon pencil alternate"></i> Job Title</a>
-                                      <a href="{{ url('fields/leavetype') }}" class="item"><i class="ui icon calendar alternate outline"></i> Leave Type</a>
+                                      <a href="{{ url('fields/company') }}" class="item"><i class="ui icon building"></i> Company</a>
+                                      <a href="{{ url('fields/department') }}" class="item"><i class="ui icon sitemap"></i> Department</a>
+                                      <a href="{{ url('fields/jobtitle') }}" class="item"><i class="ui icon address book"></i> Job Title</a>
+                                      <a href="{{ url('fields/leavetype') }}" class="item"><i class="ui icon calendar alternate"></i> Leave Type</a>
                                     </div>
                               </div>
                             </li>

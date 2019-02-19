@@ -760,6 +760,21 @@
                                                 </select>
                                             </div>
                                             <div class="eight wide field">
+                                                <label>Workspace Name for Asana Report</label>
+                                                <div class="ui multiple search selection dropdown tags">
+                                                    <input type="hidden" name="asana_workspaces" value="@isset($data->asana_workspaces){{ $data->asana_workspaces }}@endisset">
+                                                        <div class="default text">Multiple workspaces name can be seperated by comma</div>
+                                                        <div class="menu">
+                                                        @isset($data->asana_workspaces)
+                                                        <?php $w = explode(",", $data->asana_workspaces);?>
+                                                        @foreach ($d as $workspace)
+                                                            <div class="item" data-value="{{ $workspace }}" selected>{{ $workspace }}</div>
+                                                        @endforeach
+                                                        @endisset
+                                                        </div>
+                                                </div>
+                                            </div>
+                                            <div class="eight wide field">
                                                 <label>Attendance</label>
                                                 <select name="enable_attendance" class="ui dropdown uppercase">
                                                     <option value="">Select Status</option>

@@ -138,6 +138,14 @@ Route::group(['middleware' => 'auth'], function () {
 			Route::post('user/update-profile', 'admin\ProfileController@updateUser');
 			Route::post('user/update-password', 'admin\ProfileController@updatePassword');
 
+			/*
+			|--------------------------------------------------------------------------
+			| Asana Users 
+			|--------------------------------------------------------------------------
+			*/
+			Route::get('asana-users', 'admin\AsanaUsersController@index');
+			Route::get('asana-users/edit/{id}', 'admin\AsanaUsersController@edit');
+			Route::post('asana-users/update/user', 'admin\AsanaUsersController@update');
 
 			/*
 			|--------------------------------------------------------------------------
@@ -271,7 +279,11 @@ Route::group(['middleware' => 'auth'], function () {
 
 });
 
-
+/*
+|--------------------------------------------------------------------------
+| Login & Authentication
+|--------------------------------------------------------------------------
+*/
 Auth::routes();
 Route::get('logout', 'Auth\LoginController@logout');
 Route::get('/logingoogle', 'Auth\LoginController@redirectToProvider');
@@ -280,4 +292,11 @@ Route::view('/permission-denied', 'errors.permission-denied');
 Route::view('/account-disabled', 'errors.account-disabled');
 Route::view('/account-not-found', 'errors.account-not-found');
 
+/*
+|--------------------------------------------------------------------------
+| CRON Job
+|--------------------------------------------------------------------------
+*/
+Route::get('cron/asana/{type}/{key}', 'CronController@asana');
+Route::get('cron/asana-job/{key}', 'CronController@asanaJob');
 

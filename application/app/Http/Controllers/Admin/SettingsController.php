@@ -35,6 +35,7 @@ class SettingsController extends Controller
         $enable_attendance = $request->enable_attendance;
         $enable_okr = $request->enable_okr;
         $enable_asana_report = $request->enable_asana_report;
+        $asana_workspaces = $request->asana_workspaces;
         $clock_comment = $request->clock_comment;
         $iprestriction = $request->iprestriction;
         $a_email = $request->email;
@@ -68,6 +69,7 @@ class SettingsController extends Controller
                 'enable_attendance' => $enable_attendance,
                 'enable_okr' => $enable_okr,
                 'enable_asana_report' => $enable_asana_report,
+                'asana_workspaces' => $asana_workspaces,
                 'clock_comment' => $clock_comment,
                 'iprestriction' => $iprestriction,
         ]);

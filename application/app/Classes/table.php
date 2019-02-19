@@ -82,10 +82,30 @@ Class table {
 		$leavegroup = DB::table('tbl_form_leavegroup');
 		return $leavegroup;
 	}
+
+  public static function asana_users() {
+    $asanausers = DB::table('tbl_asana_users');
+    return $asanausers;
+  }
+
+  public static function asana_projects() {
+    $asanaprojects = DB::table('tbl_asana_projects');
+    return $asanaprojects;
+  }
+
+  public static function asana_tasks() {
+    $asanatasks = DB::table('tbl_asana_tasks');
+    return $asanatasks;
+  }
+
+  public static function asana_jobs() {
+    $asanajobs = DB::table('tbl_asana_jobs');
+    return $asanajobs;
+  }
 	   
 	public static function settings() {
-    	$settings = DB::table('settings');
-    	return $settings;
-   	}
+    $settings = DB::table('settings');
+    return $settings;
+  }
 
 }
