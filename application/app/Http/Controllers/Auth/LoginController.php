@@ -94,8 +94,18 @@ class LoginController extends Controller
             return redirect('login');
         }
         // only allow people with @company.com to login
-        if(explode("@", $user->email)[1] !== env('GOOGLE_ALLOWEDDOMAIN')){
-            return redirect('login');
+        $google_login_domains = table::settings()->value('google_login_domains');
+        if(isset($google_login_domains)){
+            $allowed_domain = false;
+            $d = explode(" ", $google_login_domains);
+            foreach ($d as $domain){
+                if(explode("@", $user->email)[1] == $domain){
+                    $allowed_domain = true;
+                }
+            }
+            if(!$allowed_domain){
+                return redirect('login');
+            }
         }
 
         // check if they're an existing user

@@ -31,6 +31,7 @@ class SettingsController extends Controller
         $country = $request->country;
         $timezone = $request->timezone;
         $enable_google_login = $request->enable_google_login;
+        $google_login_domains = $request->google_login_domains;
         $enable_attendance = $request->enable_attendance;
         $enable_okr = $request->enable_okr;
         $enable_asana_report = $request->enable_asana_report;
@@ -63,6 +64,7 @@ class SettingsController extends Controller
                 'admin_email' => $a_email,
                 'admin_phone' => $a_phone,
                 'enable_google_login' => $enable_google_login,
+                'google_login_domains' => $google_login_domains,
                 'enable_attendance' => $enable_attendance,
                 'enable_okr' => $enable_okr,
                 'enable_asana_report' => $enable_asana_report,

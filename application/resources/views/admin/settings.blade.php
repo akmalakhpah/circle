@@ -729,6 +729,21 @@
                                                 </select>
                                             </div>
                                             <div class="eight wide field">
+                                                <label>Allowed Domains for Google Log-In</label>
+                                                <div class="ui multiple search selection dropdown tags">
+                                                    <input type="hidden" name="google_login_domains" value="@isset($data->google_login_domains){{ $data->google_login_domains }}@endisset">
+                                                        <div class="default text">Multiple domains can be seperated by comma</div>
+                                                        <div class="menu">
+                                                        @isset($data->google_login_domains)
+                                                        <?php $d = explode(" ", $data->google_login_domains);?>
+                                                        @foreach ($d as $domain)
+                                                            <div class="item" data-value="{{ $domain }}" selected>{{ $domain }}</div>
+                                                        @endforeach
+                                                        @endisset
+                                                        </div>
+                                                </div>
+                                            </div>
+                                            <div class="eight wide field">
                                                 <label>OKR</label>
                                                 <select name="enable_okr" class="ui dropdown uppercase">
                                                     <option value="">Select Status</option>
@@ -1051,5 +1066,10 @@
     @section('scripts')
     <script type="text/javascript">
         $('.menu .item').tab();
+        $('.tags')
+          .dropdown({
+            allowAdditions: true,
+            delimiter: ','
+        });
     </script>
     @endsection 
