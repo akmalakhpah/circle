@@ -14,6 +14,7 @@ use App\Classes\table;
 use App\Classes\permission;
 use App\Http\Requests;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use App\Http\Controllers\Controller;
 use Asana\Client;
 
@@ -154,18 +155,20 @@ class CronController extends Controller
 
                         if($user_gid != null && $task->name != null)
                         {
-                            $asana_tasks = table::asana_tasks()->updateOrInsert(
-                                ['gid' => $task->id],
-                                [   'name' => $task->name, 
-                                    'user_gid' => $user_gid,
-                                    'projects_gid' => $proj_gid->gid,
-                                    'completed' => $completed,
-                                    'completed_at' => $completed_at,
-                                    'created_at' => $created_at,
-                                    'due_on' => $due_on,
-                                ]
-                            );
-                            ++$total_import;
+                            if(!Str::endsWith($task->name, ':')){
+                                $asana_tasks = table::asana_tasks()->updateOrInsert(
+                                    ['gid' => $task->id],
+                                    [   'name' => $task->name, 
+                                        'user_gid' => $user_gid,
+                                        'projects_gid' => $proj_gid->gid,
+                                        'completed' => $completed,
+                                        'completed_at' => $completed_at,
+                                        'created_at' => $created_at,
+                                        'due_on' => $due_on,
+                                    ]
+                                );
+                                ++$total_import;
+                            }
                         }
                     }
                 }
@@ -208,19 +211,20 @@ class CronController extends Controller
                             }
 
                             if($user_gid != null && $task->name != null)
-                            {
-                                $asana_tasks = table::asana_tasks()->updateOrInsert(
-                                    ['gid' => $task->id],
-                                    [   'name' => $task->name, 
-                                        'user_gid' => $user_gid,
-                                        'projects_gid' => $project_gid,
-                                        'completed' => $completed,
-                                        'completed_at' => $completed_at,
-                                        'created_at' => $created_at,
-                                        'due_on' => $due_on,
-                                    ]
-                                );
-                                ++$total_import;
+                            {   if(!Str::endsWith($task->name, ':')){
+                                    $asana_tasks = table::asana_tasks()->updateOrInsert(
+                                        ['gid' => $task->id],
+                                        [   'name' => $task->name, 
+                                            'user_gid' => $user_gid,
+                                            'projects_gid' => $project_gid,
+                                            'completed' => $completed,
+                                            'completed_at' => $completed_at,
+                                            'created_at' => $created_at,
+                                            'due_on' => $due_on,
+                                        ]
+                                    );
+                                    ++$total_import;
+                                }
                             }
                         }
                     }
@@ -400,18 +404,20 @@ class CronController extends Controller
 
                             if($user_gid != null && $task->name != null)
                             {
-                                $asana_tasks = table::asana_tasks()->updateOrInsert(
-                                    ['gid' => $task->id],
-                                    [   'name' => $task->name, 
-                                        'user_gid' => $user_gid,
-                                        'projects_gid' => $project_gid,
-                                        'completed' => $completed,
-                                        'completed_at' => $completed_at,
-                                        'created_at' => $created_at,
-                                        'due_on' => $due_on,
-                                    ]
-                                );
-                                ++$total_import;
+                                if(!Str::endsWith($task->name, ':')){
+                                    $asana_tasks = table::asana_tasks()->updateOrInsert(
+                                        ['gid' => $task->id],
+                                        [   'name' => $task->name, 
+                                            'user_gid' => $user_gid,
+                                            'projects_gid' => $project_gid,
+                                            'completed' => $completed,
+                                            'completed_at' => $completed_at,
+                                            'created_at' => $created_at,
+                                            'due_on' => $due_on,
+                                        ]
+                                    );
+                                    ++$total_import;
+                                }
                             }
                         }
                     }
@@ -419,7 +425,7 @@ class CronController extends Controller
                     table::asana_jobs()->where('id', $asana_jobs->id)->update(["status" => 2,"updated_at" => now()]);
 
                 case "summary":
-                    //table::asana_jobs()->where('id', $asana_jobs->id)->update(["status" => 1,"updated_at" => now()]);
+                    table::asana_jobs()->where('id', $asana_jobs->id)->update(["status" => 1,"updated_at" => now()]);
 
                     $total_import = 0;
                     if(isset($asana_jobs->gid)){
@@ -430,9 +436,9 @@ class CronController extends Controller
                         $ww_today = (int)Carbon::now()->format('W');
 
                         $tasks_open = table::asana_tasks()->where(["user_gid" => $asana_jobs->gid, "completed" => '0'])->count();
-                        $tasks_overdue = table::asana_tasks()->where(["user_gid" => $asana_jobs->gid, "completed" => '0'])->count();
-                        $tasks_completed = table::asana_tasks()->where(["user_gid" => $asana_jobs->gid, "completed" => '0'])->count();
-                        $tasks_created = table::asana_tasks()->where(["user_gid" => $asana_jobs->gid, "completed" => '0'])->count();
+                        $tasks_overdue = table::asana_tasks()->where(["user_gid" => $asana_jobs->gid, "completed" => '0'])->where('due_on', '<' , Carbon::today())->count();
+                        $tasks_completed = table::asana_tasks()->where(["user_gid" => $asana_jobs->gid, "completed" => '1', ])->whereDate('completed_at', Carbon::today())->count();
+                        $tasks_created = table::asana_tasks()->where(["user_gid" => $asana_jobs->gid])->whereDate('created_at', Carbon::today())->count();
 
                         $asana_summary = table::asana_summary()->updateOrInsert(
                                     [   'user_gid' => $asana_jobs->gid,
@@ -451,7 +457,7 @@ class CronController extends Controller
 
                     }
 
-                    //table::asana_jobs()->where('id', $asana_jobs->id)->update(["status" => 2,"updated_at" => now()]);
+                    table::asana_jobs()->where('id', $asana_jobs->id)->update(["status" => 2,"updated_at" => now()]);
 
                 default:
                     break;
