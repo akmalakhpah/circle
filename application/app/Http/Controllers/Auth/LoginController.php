@@ -97,7 +97,7 @@ class LoginController extends Controller
         $google_login_domains = table::settings()->value('google_login_domains');
         if(isset($google_login_domains)){
             $allowed_domain = false;
-            $d = explode(" ", $google_login_domains);
+            $d = explode(",", $google_login_domains);
             foreach ($d as $domain){
                 if(explode("@", $user->email)[1] == $domain){
                     $allowed_domain = true;

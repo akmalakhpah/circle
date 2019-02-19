@@ -735,7 +735,7 @@
                                                         <div class="default text">Multiple domains can be seperated by comma</div>
                                                         <div class="menu">
                                                         @isset($data->google_login_domains)
-                                                        <?php $d = explode(" ", $data->google_login_domains);?>
+                                                        <?php $d = explode(",", $data->google_login_domains);?>
                                                         @foreach ($d as $domain)
                                                             <div class="item" data-value="{{ $domain }}" selected>{{ $domain }}</div>
                                                         @endforeach
