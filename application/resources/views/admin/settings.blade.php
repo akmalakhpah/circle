@@ -34,7 +34,7 @@
                                             
                                         {{ csrf_field() }}
                                             
-                                            <div class="eight wide field">
+                                            <div class="wide field">
                                                 <label>Country</label>
                                                 <select name="country" class="ui search dropdown uppercase">
                                                     <option value="">Select Country</option>
@@ -287,7 +287,7 @@
                                                     <option value="Zimbabwe" @if($data->country == "Zimbabwe") selected @endif>Zimbabwe</option>
                                                 </select>
                                             </div>
-                                            <div class="eight wide field">
+                                            <div class="wide field">
                                                 <label>Timezone</label>
                                                 <select name="timezone" class="ui search dropdown uppercase">
                                                     <option value="">Select Timezone</option>
@@ -720,7 +720,7 @@
                                             </div>
 
                                             <h3 class="ui header">Features</h3>
-                                            <div class="eight wide field">
+                                            <div class="wide field">
                                                 <label>Google Log-In</label>
                                                 <select name="enable_google_login" class="ui dropdown uppercase">
                                                     <option value="">Select Status</option>
@@ -728,7 +728,7 @@
                                                     <option value="0" @isset($data->enable_google_login)  @if($data->enable_google_login  == 0) selected @endif @endisset>Disabled</option>
                                                 </select>
                                             </div>
-                                            <div class="eight wide field">
+                                            <div class="wide field">
                                                 <label>Allowed Domains for Google Log-In</label>
                                                 <div class="ui multiple search selection dropdown tags">
                                                     <input type="hidden" name="google_login_domains" value="@isset($data->google_login_domains){{ $data->google_login_domains }}@endisset">
@@ -743,7 +743,7 @@
                                                         </div>
                                                 </div>
                                             </div>
-                                            <div class="eight wide field">
+                                            <div class="wide field">
                                                 <label>OKR</label>
                                                 <select name="enable_okr" class="ui dropdown uppercase">
                                                     <option value="">Select Status</option>
@@ -751,7 +751,7 @@
                                                     <option value="0" @isset($data->enable_okr)  @if($data->enable_okr  == 0) selected @endif @endisset>Disabled</option>
                                                 </select>
                                             </div>
-                                            <div class="eight wide field">
+                                            <div class="wide field">
                                                 <label>Asana Report</label>
                                                 <select name="enable_asana_report" class="ui dropdown uppercase">
                                                     <option value="">Select Status</option>
@@ -759,7 +759,7 @@
                                                     <option value="0" @isset($data->enable_asana_report)  @if($data->enable_asana_report  == 0) selected @endif @endisset>Disabled</option>
                                                 </select>
                                             </div>
-                                            <div class="eight wide field">
+                                            <div class="wide field">
                                                 <label>Workspace Name for Asana Report</label>
                                                 <div class="ui multiple search selection dropdown tags">
                                                     <input type="hidden" name="asana_workspaces" value="@isset($data->asana_workspaces){{ $data->asana_workspaces }}@endisset">
@@ -774,7 +774,17 @@
                                                         </div>
                                                 </div>
                                             </div>
-                                            <div class="eight wide field">
+                                            <div class="wide field">
+                                                <label>Cron URL for Asana Report</label>
+                                                <div class="ui action input">
+                                                  <input type="text" value="{{ url('/cron/asana-job/') }}/{{ env('CRON_KEY') }}">
+                                                  <a class="ui teal right labeled icon button" href="{{ url('/cron/asana-job/') }}/{{ env('CRON_KEY') }}" target="_blank">
+                                                    <i class="copy icon"></i>Copy
+                                                  </a>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="wide field">
                                                 <label>Attendance</label>
                                                 <select name="enable_attendance" class="ui dropdown uppercase">
                                                     <option value="">Select Status</option>
@@ -782,7 +792,7 @@
                                                     <option value="0" @isset($data->enable_attendance)  @if($data->enable_attendance  == 0) selected @endif @endisset>Disabled</option>
                                                 </select>
                                             </div>
-                                            <div class="eight wide field">
+                                            <div class="wide field">
                                                 <label>Clock-In Comment Feature</label>
                                                 <select name="clock_comment" class="ui dropdown uppercase">
                                                     <option value="">Select Status</option>
@@ -790,17 +800,17 @@
                                                     <option value="0" @isset($data->clock_comment) @if($data->clock_comment == 0) selected @endif @endisset>Disabled</option>
                                                 </select>
                                             </div>
-                                            <div class="eight wide field">
+                                            <div class="wide field">
                                                 <label>Clock-In/Out IP Restriction</label>
                                                 <textarea name="iprestriction" rows="3" placeholder="Enter IP addresss. If more than one add comma at the end of every IP address.">@isset($data->iprestriction){{ $data->iprestriction }}@endisset</textarea>
                                             </div>
 
                                             <h3 class="ui header">Admin Contact</h3>
-                                            <div class="eight wide field">
+                                            <div class="wide field">
                                                 <label>Email</label>
                                                 <input type="email" name="email" id="email" placeholder="admin@example.com" value="@isset($data->admin_email){{ $data->admin_email }}@endisset">
                                             </div>
-                                            <div class="eight wide field">
+                                            <div class="wide field">
                                                 <label>Phone or Telephone:</label>
                                                 <input type="text" name="phone" id="phone" placeholder="Enter Phone" value="@isset($data->admin_phone){{ $data->admin_phone }}@endisset">
                                             </div>
