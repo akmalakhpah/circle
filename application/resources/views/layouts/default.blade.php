@@ -7,6 +7,9 @@
 * Copyright 2019 Aidan Technologies
 * Website: https://github.com/akmalakhpah/circle
 -->
+<?php 
+    $setting = App\Classes\table::settings()->first();
+?>
 <html lang="{{ app()->getLocale() }}">
     <head>
         <meta charset="utf-8">
@@ -52,14 +55,7 @@
 
         <div class="wrapper">
         
-        <nav id="sidebar">
-            <div class="sidebar-header">
-                <div class="logo">
-                <a href="/" class="simple-text">
-                    <img src="{{ asset('/assets/images/img/logo-small.png') }}">
-                </a>
-                </div>
-            </div>
+        <nav id="sidebar" class="active">
 
             <ul class="list-unstyled components">
                 <li class="">
@@ -76,6 +72,7 @@
                     </a>
                 </li>
                     
+                @if($setting->enable_attendance)
                 <li class="">
                     <a href="{{ url('attendance') }}">
                         <i class="ui icon clock outline"></i>
@@ -96,6 +93,7 @@
                         <p>Manage Leave</p>
                     </a>
                 </li>
+                @endif
 
                 <li class="">
                     <a href="{{ url('reports') }}">
@@ -110,12 +108,15 @@
                         <p>Users</p>
                     </a>
                 </li>
+
+                @if($setting->enable_asana_report)
                 <li>
                     <a href="{{ url('asana-users') }}">
                         <i class="ui icon user circle outline"></i>
                         <p>Asana Users</p>
                     </a>
                 </li>
+                @endif
 
                 <li>
                     <a href="{{ url('settings') }}">
@@ -126,13 +127,21 @@
             </ul>
         </nav>
 
-        <div id="body">
+        <div id="body" class="active">
             <nav class="navbar navbar-expand-lg navbar-light bg-lightgray">
                 <div class="container-fluid">
 
                     <button type="button" id="slidesidebar" class="ui icon button btn-light">
                         <i class="ui icon bars"></i>
                     </button>
+
+                    <div class="align-left">
+                        <div class="logo">
+                        <a href="/" class="simple-text">
+                            <img src="{{ asset('/assets/images/img/logo-dark.png') }}">
+                        </a>
+                        </div>
+                    </div>
 
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="nav navbar-nav ml-auto navmenu">
@@ -142,7 +151,9 @@
                                     <i class="dropdown icon"></i>
                                     <div class="menu" tabindex="-1">
                                       <a href="{{ url('employees/new') }}" class="item"><i class="ui icon user plus"></i> Add Employee</a>
+                                      @if($setting->enable_attendance)
                                       <a href="{{ url('clock') }}" target="_blank" class="item"><i class="ui icon clock"></i> Clock In/Out</a>
+                                      @endif
                                       <div class="divider"></div>
                                       <a href="{{ url('fields/company') }}" class="item"><i class="ui icon building"></i> Company</a>
                                       <a href="{{ url('fields/department') }}" class="item"><i class="ui icon sitemap"></i> Department</a>

@@ -15,14 +15,14 @@
 
         <div class="row">
 
-            <div class="col-md-4">
+            <div class="col-md-6">
                 <div class="info-box">
-                    <span class="info-box-icon bg-aqua"><i class="ui icon user outline circle"></i></span>
+                    <span class="info-box-icon bg-cyan"><i class="ui icon user outline circle"></i></span>
                     <div class="info-box-content">
-                        <span class="info-box-text">EMPLOYEES</span>
+                        <span class="info-box-text">ALL STAFF</span>
                         <div class="progress-group">
                             <div class="progress sm">
-                                <div class="progress-bar progress-bar-aqua" style="width: 100%"></div>
+                                <div class="progress-bar progress-bar-cyan" style="width: 100%"></div>
                             </div>
                             <div class="stats_d">
                                 <table style="width: 100%;">
@@ -47,69 +47,14 @@
                 </div>
             </div>
 
-            <div class="col-md-4">
-                <div class="info-box">
-                    <span class="info-box-icon bg-green"><i class="ui icon clock outline"></i></span>
-                    <div class="info-box-content">
-                        <span class="info-box-text">ATTENDANCES</span>
-                        <div class="progress-group">
-                            <div class="progress sm">
-                                <div class="progress-bar progress-bar-green" style="width: 100%"></div>
-                            </div>
-                            <div class="stats_d">
-                                <table style="width: 100%;">
-                                    <tbody>
-                                        <tr>
-                                            <td>Online</td>
-                                            <td>@isset($is_online_now) {{ $is_online_now }} @endisset</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Offline</td>
-                                            <td>@isset($is_offline_now) {{ $is_offline_now }} @endisset</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-4">
-                <div class="info-box">
-                    <span class="info-box-icon bg-orange"><i class="ui icon life ring outline"></i></span>
-                    <div class="info-box-content">
-                        <span class="info-box-text">LEAVES OF ABSENCE</span>
-                        <div class="progress-group">
-                            <div class="progress sm">
-                                <div class="progress-bar progress-bar-orange" style="width: 100%"></div>
-                            </div>
-                            <div class="stats_d">
-                                <table style="width: 100%;">
-                                    <tbody>
-                                        <tr>
-                                            <td>Approved</td>
-                                            <td>@isset($emp_leaves_approve) {{ $emp_leaves_approve }} @endisset</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Pending</td>
-                                            <td>@isset($emp_leaves_pending) {{ $emp_leaves_pending }} @endisset</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+         </div>
 
         <div class="row">
 
-            <div class="col-md-4">
-                <div class="box box-success">
+            <div class="col-md-6">
+                <div class="box box-cyan">
                     <div class="box-header with-border">
-                        <h3 class="box-title">Newest Employees</h3>
+                        <h3 class="box-title">Newest Team Members</h3>
                         <div class="box-tools pull-right">
                             <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
                         </div>
@@ -139,8 +84,108 @@
                 </div>
             </div>
 
-            <div class="col-md-4">
-                <div class="box box-success">
+            <div class="col-md-6">
+                <div class="box box-cyan">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Upcoming Birthday</h3>
+                        <div class="box-tools pull-right">
+                            <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                        </div>
+                    </div>
+                    <div class="box-body">
+                    <table class="table responsive nobordertop">
+                        <thead>
+                            <tr>
+                                <th class="text-left">Name</th>
+                                <th class="text-left">Birthday Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @isset($emp_birthday)
+                                @foreach ($emp_birthday as $data)
+                                <tr>
+                                    <td class="text-left name-title @if(e(date('M d')) == e(date('M d', strtotime($data->birthday)))) text-cyan @endif">{{ $data->lastname }}, {{ $data->firstname }}</td>
+                                    <td class="text-left @if(e(date('M d')) == e(date('M d', strtotime($data->birthday)))) text-cyan @endif">@php echo e(date('M d', strtotime($data->birthday))) @endphp @if(e(date('M d')) == e(date('M d', strtotime($data->birthday)))) (Today) @endif</td>
+                                </tr>
+                                @endforeach
+                            @endisset
+                        </tbody>
+                    </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+            
+        @if($setting->enable_attendance)
+        <div class="row">
+            <div class="col-md-12">
+            <h3 class="ui header">Attendance</h3>
+            </div>    
+        </div>
+
+        <div class="row">
+
+            <div class="col-md-6">
+                <div class="info-box">
+                    <span class="info-box-icon bg-yellow"><i class="ui icon clock outline"></i></span>
+                    <div class="info-box-content">
+                        <span class="info-box-text">ATTENDANCES</span>
+                        <div class="progress-group">
+                            <div class="progress sm">
+                                <div class="progress-bar progress-bar-yellow" style="width: 100%"></div>
+                            </div>
+                            <div class="stats_d">
+                                <table style="width: 100%;">
+                                    <tbody>
+                                        <tr>
+                                            <td>Online</td>
+                                            <td>@isset($is_online_now) {{ $is_online_now }} @endisset</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Offline</td>
+                                            <td>@isset($is_offline_now) {{ $is_offline_now }} @endisset</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="info-box">
+                    <span class="info-box-icon bg-red"><i class="ui icon life ring outline"></i></span>
+                    <div class="info-box-content">
+                        <span class="info-box-text">LEAVES OF ABSENCE</span>
+                        <div class="progress-group">
+                            <div class="progress sm">
+                                <div class="progress-bar progress-bar-red" style="width: 100%"></div>
+                            </div>
+                            <div class="stats_d">
+                                <table style="width: 100%;">
+                                    <tbody>
+                                        <tr>
+                                            <td>Approved</td>
+                                            <td>@isset($emp_leaves_approve) {{ $emp_leaves_approve }} @endisset</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Pending</td>
+                                            <td>@isset($emp_leaves_pending) {{ $emp_leaves_pending }} @endisset</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+
+            <div class="col-md-6">
+                <div class="box box-yellow">
                     <div class="box-header with-border">
                         <h3 class="box-title">Recent Attendances</h3>
                         <div class="box-tools pull-right">
@@ -191,9 +236,9 @@
                     </div>
                 </div>
             </div>
-        
-            <div class="col-md-4">
-                <div class="box box-success">
+                    
+            <div class="col-md-6">
+                <div class="box box-red">
                     <div class="box-header with-border">
                         <h3 class="box-title">Recent Leaves of Absence</h3>
                         <div class="box-tools pull-right">
@@ -224,6 +269,8 @@
             </div>
 
         </div>
+        @endif
+
     </div>
 
     @endsection

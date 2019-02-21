@@ -12,6 +12,11 @@ $(document).ready(function() {
         $('#body').toggleClass('active');
     });
 
+    $('#slidesidebar').mouseover( function() {
+        $('#sidebar').removeClass('active');
+        $('#body').removeClass('active');
+    });
+
     $('input, textarea').focusout(function(event) {
     	var notempty = $(this).val();
     	if(notempty !== '') {

@@ -7,6 +7,9 @@
 * Copyright 2019 Aidan Technologies
 * Website: https://github.com/akmalakhpah/circle
 -->
+<?php 
+    $setting = App\Classes\table::settings()->first();
+?>
 <html lang="{{ app()->getLocale() }}">
     <head>
         <meta charset="utf-8">
@@ -51,14 +54,7 @@
 
         <div class="wrapper">
         
-        <nav id="sidebar" class="active-">
-            <div class="sidebar-header">
-                <div class="logo">
-                <a href="/" class="simple-text">
-                    <img src="{{ asset('/assets/images/img/logo-small.png') }}">
-                </a>
-                </div>
-            </div>
+        <nav id="sidebar" class="active">
 
             <ul class="list-unstyled components">
                 <li class="">
@@ -67,6 +63,7 @@
                         <p>Dashboard</p>
                     </a>
                 </li>
+                @if($setting->enable_attendance)
                 <li class="">
                     <a href="{{ url('personal/attendance/view') }}">
                         <i class="ui icon clock outline"></i>
@@ -85,22 +82,25 @@
                         <p>My Leave</p>
                     </a>
                 </li>
-                <li>
-                    <a href="{{ url('personal/settings') }}">
-                        <i class="ui icon toggle off"></i>
-                        <p>Settings</p>
-                    </a>
-                </li>
+                @endif
             </ul>
         </nav>
 
-        <div id="body">
+        <div id="body" class="active">
             <nav class="navbar navbar-expand-lg navbar-light bg-lightgray">
                 <div class="container-fluid">
 
                     <button type="button" id="slidesidebar" class="ui icon button btn-light">
                         <i class="ui icon bars"></i>
                     </button>
+
+                    <div class="align-left">
+                        <div class="logo">
+                        <a href="/" class="simple-text">
+                            <img src="{{ asset('/assets/images/img/logo-dark.png') }}">
+                        </a>
+                        </div>
+                    </div>
 
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="nav navbar-nav ml-auto navmenu">
@@ -109,8 +109,10 @@
                                     <i class="ui icon th"></i> <span class="navmenutext">Quick Access</span>
                                     <i class="dropdown icon"></i>
                                     <div class="menu" tabindex="-1">
+                                      @if($setting->enable_attendance)
                                       <a href="{{ url('clock') }}" target="_blank" class="item"><i class="ui icon clock"></i> Clock In/Out</a>
                                       <div class="divider"></div>
+                                      @endif
                                       <a href="{{ url('personal/profile/view') }}" target="_blank" class="item"><i class="ui icon user"></i> My Profile</a>
                                     </div>
                               </div>
