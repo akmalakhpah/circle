@@ -219,17 +219,21 @@ class PersonalReportsController extends Controller
 		
 		$id = \Auth::user()->reference;
 
-        $department = table::companydata()->where('reference',$id)->first()->department;
-        $department_members = table::companydata()->select('gid')->leftjoin('tbl_people','tbl_company_data.reference','=','tbl_people.id')->leftjoin('tbl_asana_users','tbl_asana_users.reference','=','tbl_people.id')->where('department',$department)->where('tbl_people.employmentstatus', 'Active')->get()->toArray();
-        $department_members_gid = array();
-        foreach ($department_members as $value) {
-        	$department_members_gid[] = $value->gid;
-        }
-        $department_members = count($department_members);
 
 		$user_gid = table::asana_users()->where('reference', $id)->first();
 		if(isset($user_gid))
 			$user_gid = $user_gid->gid;
+
+        $department = table::companydata()->where('reference',$id)->first()->department;
+        $department_members = table::companydata()->select('gid')->leftjoin('tbl_people','tbl_company_data.reference','=','tbl_people.id')->leftjoin('tbl_asana_users','tbl_asana_users.reference','=','tbl_people.id')->where('department',$department)->where('tbl_people.employmentstatus', 'Active')->get()->toArray();
+        $department_members_gid = array();
+        foreach ($department_members as $value) {
+        	if(isset($value->gid)){
+        		if($value->gid != $user_gid)
+        			$department_members_gid[] = $value->gid;
+        	}
+        }
+        $department_members = count($department_members);
 
 		$type = 'week';
 		if(isset($request->type))
@@ -313,27 +317,34 @@ class PersonalReportsController extends Controller
 			$overdue_d[] = date($datedisplay, strtotime($task->completed_at));
 		}
 		//dd($task_completed);
-		asort($completed_p); 
-		asort($completed_d); 
-		asort($overdue_p); 
-		asort($overdue_d);
-		$ctp = array_count_values($completed_p); 
-		$ctpdata = implode($ctp, ', ') . ',';
-		$ctd = array_count_values($completed_d);
-		$ctddata = implode($ctd, ', ') . ',';
-		foreach ($ctd as $value) {
-			$ctd_avg[] = ($value/$department_members);
+		if(isset($completed_p)){
+			asort($completed_p); 
+			$ctp = array_count_values($completed_p); 
+			$ctpdata = implode($ctp, ', ') . ',';
 		}
-		$ctddata_avg = implode($ctd_avg, ', ') . ',';
-
-		$cop = array_count_values($overdue_p);
-		$copdata = implode($cop, ', ') . ',';
-		$cod = array_count_values($overdue_d);
-		$coddata = implode($cod, ', ') . ',';
-		foreach ($cod as $value) {
-			$cod_avg[] = ($value/$department_members);
+		if(isset($completed_d)){
+			asort($completed_d); 
+			$ctd = array_count_values($completed_d);
+			$ctddata = implode($ctd, ', ') . ',';
+			foreach ($ctd as $value) {
+				$ctd_avg[] = ($value/$department_members);
+			}
+			$ctddata_avg = implode($ctd_avg, ', ') . ',';
 		}
-		$coddata_avg = implode($cod_avg, ', ') . ',';
+		if(isset($overdue_p)){
+			asort($overdue_p); 
+			$cop = array_count_values($overdue_p);
+			$copdata = implode($cop, ', ') . ',';
+		}
+		if(isset($overdue_d)){
+			asort($overdue_d);
+			$cod = array_count_values($overdue_d);
+			$coddata = implode($cod, ', ') . ',';
+			foreach ($cod as $value) {
+				$cod_avg[] = ($value/$department_members);
+			}
+			$coddata_avg = implode($cod_avg, ', ') . ',';
+		}
 		
 		$orgProfile = table::companydata()->get();
 
