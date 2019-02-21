@@ -31,8 +31,14 @@
                             <td><a href="{{ url('personal/reports/employee-schedule') }}"><i class="ui icon calendar alternate outline"></i> Staff Schedule Report</a></td>
                         </tr>
                         @endif
+                                        
+                        @if($setting->enable_asana_report)
                         <tr>
-                            <td><a href="{{ url('personal/reports/organization-profile') }}"><i class="ui icon chart pie"></i> Organization Profile</a></td>
+                            <td><a href="{{ url('personal/reports/asana-task') }}"><i class="ui icon font"></i> Asana Tasks Report</a></td>
+                        </tr>
+                        @endif
+                        <tr>
+                            <td><a href="{{ url('personal/reports/organization-profile') }}"><i class="ui icon building"></i> Organization Demographic</a></td>
                         </tr>
 
                     </tbody>

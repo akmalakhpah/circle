@@ -438,6 +438,8 @@ class CronController extends Controller
                         $tasks_open = table::asana_tasks()->where(["user_gid" => $asana_jobs->gid, "completed" => '0'])->count();
                         $tasks_overdue = table::asana_tasks()->where(["user_gid" => $asana_jobs->gid, "completed" => '0'])->where('due_on', '<' , Carbon::today())->count();
                         $tasks_completed = table::asana_tasks()->where(["user_gid" => $asana_jobs->gid, "completed" => '1', ])->whereDate('completed_at', Carbon::today())->count();
+                        $tasks_completed_ontime = table::asana_tasks()->where(["user_gid" => $asana_jobs->gid, "completed" => '1', ])->whereDate('completed_at', Carbon::today())->whereRaw('(completed_at <= due_on OR due_on IS NULL)')->count();
+                        $tasks_completed_overdue = table::asana_tasks()->where(["user_gid" => $asana_jobs->gid, "completed" => '1', ])->whereDate('completed_at', Carbon::today())->whereRaw('completed_at > due_on')->count();
                         $tasks_created = table::asana_tasks()->where(["user_gid" => $asana_jobs->gid])->whereDate('created_at', Carbon::today())->count();
 
                         $asana_summary = table::asana_summary()->updateOrInsert(
@@ -450,6 +452,8 @@ class CronController extends Controller
                                         'tasks_open' => $tasks_open,
                                         'tasks_overdue' => $tasks_overdue,
                                         'tasks_completed' => $tasks_completed,
+                                        'tasks_completed_ontime' => $tasks_completed_ontime,
+                                        'tasks_completed_overdue' => $tasks_completed_overdue,
                                         'tasks_created' => $tasks_created,
                                         'updated_at' =>  now(),
                                     ]

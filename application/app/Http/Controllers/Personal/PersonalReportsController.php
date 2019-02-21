@@ -25,7 +25,7 @@ class PersonalReportsController extends Controller
 
         $setting = table::settings()->first();
 
-    	return view('personal.reports', compact('setting'));
+    	return view('personal.personal-reports', compact('setting'));
     }
 
 	public function empList() {
@@ -212,5 +212,62 @@ class PersonalReportsController extends Controller
 		 	$data = table::schedules()->where('idno', $id)->select('reference', 'employee', 'intime', 'outime', 'datefrom', 'dateto', 'hours', 'restday', 'archive')->orderBy('archive', 'ASC')->get();
 			return response()->json($data);
 		} 
+	}
+
+	public function asanaTask() {
+		if (permission::permitted('reports')=='fail'){ return view('errors.permission-denied'); }
+		
+		$today = date('M, d Y');
+		//table::reportviews()->where('report_id', 5)->update(array('last_viewed' => $today));
+
+		$ed = table::people()->join('tbl_company_data', 'tbl_people.id', '=', 'tbl_company_data.reference')->where('tbl_people.employmentstatus', 'Active')->get();
+
+		// chart gender
+		foreach ($ed as $g) { $gender[] = $g->gender; $dgc = array_count_values($gender); }
+		$gc = implode($dgc, ', ') . ',';
+
+		// chart civil status
+		foreach ($ed as $cs) { $civilstatus[] = $cs->civilstatus; $csc = array_count_values($civilstatus); }
+		$cg = implode($csc, ', ') . ',';
+
+		// chart year hired
+		// $tz = ini_get('date.timezone');
+        // $dtz = new DateTimeZone($tz);
+		foreach ($ed as $yearhired) {
+			$year_p[] = date("Y", strtotime($yearhired->startdate));
+			$year_d[] = date("Y", strtotime($yearhired->dateregularized));
+		}
+		asort($year_p); 
+		asort($year_d); 
+		$ctp = array_count_values($year_p);
+		$ctpdata = implode($ctp, ', ') . ',';
+		$ctd = array_count_values($year_d);
+		$ctddata = implode($ctd, ', ') . ',';
+		
+		$orgProfile = table::companydata()->get();
+
+		// overdue period
+		$days_1_2 = table::people()->where([['age', '>=', '18'], ['age', '<=', '24']])->count();
+		$days_2_5 = table::people()->where([['age', '>=', '25'], ['age', '<=', '31']])->count();
+		$days_5_7 = table::people()->where([['age', '>=', '32'], ['age', '<=', '38']])->count();
+		$days_7_14 = table::people()->where([['age', '>=', '39'], ['age', '<=', '45']])->count();
+		$more_14 = table::people()->where('age', '>=', '46')->count();
+		
+		// if null val 0
+		if($days_1_2 == null) {$days_1_2 = 0;};
+		if($days_2_5 == null) {$days_2_5 = 0;};
+		if($days_5_7 == null) {$days_5_7 = 0;};
+		if($days_7_14 == null) {$days_7_14 = 0;};
+		if($more_14 == null) {$more_14 = 0;};	
+
+		// chart age group
+		$overdue_period = $days_1_2.','.$days_2_5.','.$days_5_7.','.$days_7_14.','.$more_14;
+
+		return view('personal.reports.report-asana-task', 
+			compact(
+				'orgProfile', 'gc', 'dgc', 'cg', 'csc',
+		 		'ctpdata', 'ctp', 'ctddata', 'ctd',
+		 		'overdue_period'
+		 	));
 	}
 }

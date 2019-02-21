@@ -69,7 +69,7 @@
                         </tr>
                         @endif
                         <tr>
-                            <td><a href="{{ url('reports/organization-profile') }}"><i class="ui icon chart pie"></i> Organization Profile</a></td>
+                            <td><a href="{{ url('reports/organization-profile') }}"><i class="ui icon building"></i> Organization Demographic</a></td>
                             <td class="odd">
                                 @isset($lastviews)
                                 @foreach ($lastviews as $views)
