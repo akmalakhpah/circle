@@ -23,11 +23,11 @@ class CronController extends Controller
     public function asana($type,$key){
 
         //get Cron job key
-        /*if($key !== env("CRON_KEY")){
+        if($key !== env("CRON_KEY")){
             return response()->json([
                 "error" => "Whoops! Please use valid key to call the Cron job"
             ]);            
-        }*/
+        }
 
         //get Asana personal access token
         $token = env('ASANA_PERSONAL_ACCESS_TOKEN');
@@ -250,11 +250,11 @@ class CronController extends Controller
    public function asanaJob($key){
 
         //get Cron job key
-        /*if($key !== env("CRON_KEY")){
+        if($key !== env("CRON_KEY")){
             return response()->json([
                 "error" => "Whoops! Please use valid key to call the Cron job"
             ]);            
-        }*/
+        }
 
         //check job schedule
         $asana_jobs = table::asana_jobs()->where("status", 0)->first();
