@@ -13,7 +13,7 @@
                 <table width="100%" class="reports-table table table-striped table-hover" id="dataTables-example">
                     <thead>
                         <tr>
-                            <th>Report name</th>
+                            <th>Report Name</th>
                         </tr>
                     </thead>
                     <tbody>
