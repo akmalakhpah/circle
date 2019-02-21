@@ -214,25 +214,58 @@ class PersonalReportsController extends Controller
 		} 
 	}
 
-	public function asanaTask() {
+	public function asanaTask(Request $request) {
 		if (permission::permitted('reports')=='fail'){ return view('errors.permission-denied'); }
 		
+		$id = \Auth::user()->reference;
+
+        $department = table::companydata()->where('reference',$id)->first()->department;
+        $department_members = table::companydata()->leftjoin('tbl_people','tbl_company_data.reference','=','tbl_people.id')->where('department',$department)->where('tbl_people.employmentstatus', 'Active')->count();
+		
+		$user_gid = table::asana_users()->where('reference', $id)->first();
+		if(isset($user_gid))
+			$user_gid = $user_gid->gid;
+
+		$type = 'week';
+		if(isset($request->type))
+			$type = $request->type;
+
+
+        switch($type){
+            case 'week':
+            	$datefilter = "(YEAR(curdate()) = YEAR(completed_at) AND WEEK(curdate()) = WEEK(completed_at))";
+                break;
+
+            case 'month':
+            	$datefilter = "(YEAR(curdate()) = YEAR(completed_at) AND MONTH(curdate()) = MONTH(completed_at))";
+                break;
+
+            case 'year':
+            	$datefilter = "(YEAR(curdate()) = YEAR(completed_at))";
+                break;
+
+            default:
+            	$datefilter = "(YEAR(curdate()) = YEAR(completed_at) AND MONTH(curdate()) = MONTH(completed_at) AND DAY(curdate()) = DAY(completed_at))";
+                break;
+        }
+
 		$today = date('M, d Y');
 		//table::reportviews()->where('report_id', 5)->update(array('last_viewed' => $today));
 
 		$ed = table::people()->join('tbl_company_data', 'tbl_people.id', '=', 'tbl_company_data.reference')->where('tbl_people.employmentstatus', 'Active')->get();
 
-		// chart gender
-		foreach ($ed as $g) { $gender[] = $g->gender; $dgc = array_count_values($gender); }
-		$gc = implode($dgc, ', ') . ',';
+		//task_ontime_overdue
+		$task_ontime_overdue = table::asana_tasks()
+			->select(DB::raw("IF((completed_at < due_on OR due_on IS NULL), 'On-time', 'Overdue' ) as status"))
+			->where('user_gid',$user_gid)
+			->whereRaw($datefilter)
+			->orderBy('status')
+			->get();
 
-		// chart civil status
-		foreach ($ed as $cs) { $civilstatus[] = $cs->civilstatus; $csc = array_count_values($civilstatus); }
-		$cg = implode($csc, ', ') . ',';
+		foreach ($task_ontime_overdue as $g) { $status[] = $g->status; $toodata = array_count_values($status); }
+		$too = implode($toodata, ', ') . ',';
 
 		// chart year hired
-		// $tz = ini_get('date.timezone');
-        // $dtz = new DateTimeZone($tz);
 		foreach ($ed as $yearhired) {
 			$year_p[] = date("Y", strtotime($yearhired->startdate));
 			$year_d[] = date("Y", strtotime($yearhired->dateregularized));
@@ -247,27 +280,41 @@ class PersonalReportsController extends Controller
 		$orgProfile = table::companydata()->get();
 
 		// overdue period
-		$days_1_2 = table::people()->where([['age', '>=', '18'], ['age', '<=', '24']])->count();
-		$days_2_5 = table::people()->where([['age', '>=', '25'], ['age', '<=', '31']])->count();
-		$days_5_7 = table::people()->where([['age', '>=', '32'], ['age', '<=', '38']])->count();
-		$days_7_14 = table::people()->where([['age', '>=', '39'], ['age', '<=', '45']])->count();
-		$more_14 = table::people()->where('age', '>=', '46')->count();
+		$days_1_2  = table::asana_tasks()->where('user_gid',$user_gid)
+						->whereRaw($datefilter)
+						->whereRaw('(DATEDIFF(completed_at,due_on) >= 1 AND DATEDIFF(completed_at,due_on) <= 2)')
+						->count();
+		$days_3_5  = table::asana_tasks()->where('user_gid',$user_gid)
+						->whereRaw($datefilter)
+						->whereRaw('(DATEDIFF(completed_at,due_on) >= 3 AND DATEDIFF(completed_at,due_on) <= 5)')
+						->count();
+		$days_6_7  = table::asana_tasks()->where('user_gid',$user_gid)
+						->whereRaw($datefilter)
+						->whereRaw('(DATEDIFF(completed_at,due_on) >= 6 AND DATEDIFF(completed_at,due_on) <= 7)')
+						->count();
+		$days_8_14 = table::asana_tasks()->where('user_gid',$user_gid)
+						->whereRaw($datefilter)
+						->whereRaw('(DATEDIFF(completed_at,due_on) >= 8 AND DATEDIFF(completed_at,due_on) <= 14)')
+						->count();
+		$more_15   = table::asana_tasks()->where('user_gid',$user_gid)
+						->whereRaw($datefilter)
+						->whereRaw('DATEDIFF(completed_at,due_on) >= 13')
+						->count();
 		
-		// if null val 0
 		if($days_1_2 == null) {$days_1_2 = 0;};
-		if($days_2_5 == null) {$days_2_5 = 0;};
-		if($days_5_7 == null) {$days_5_7 = 0;};
-		if($days_7_14 == null) {$days_7_14 = 0;};
-		if($more_14 == null) {$more_14 = 0;};	
-
-		// chart age group
-		$overdue_period = $days_1_2.','.$days_2_5.','.$days_5_7.','.$days_7_14.','.$more_14;
+		if($days_3_5 == null) {$days_3_5 = 0;};
+		if($days_6_7 == null) {$days_6_7 = 0;};
+		if($days_8_14 == null) {$days_8_14 = 0;};
+		if($more_15 == null) {$more_15 = 0;};	
+		$overdue_period = $days_1_2.','.$days_3_5.','.$days_6_7.','.$days_8_14.','.$more_15;
 
 		return view('personal.reports.report-asana-task', 
 			compact(
 				'orgProfile', 'gc', 'dgc', 'cg', 'csc',
 		 		'ctpdata', 'ctp', 'ctddata', 'ctd',
-		 		'overdue_period'
+		 		'toodata','too',
+		 		'overdue_period',
+		 		'type'
 		 	));
 	}
 }

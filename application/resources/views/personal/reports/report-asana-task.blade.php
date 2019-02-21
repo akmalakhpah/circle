@@ -6,7 +6,7 @@
         <div class="row">
             <div class="col-md-12">
                 <h2 class="page-title">Asana Task Reports
-                    <button class="ui basic button mini offsettop5 float-right" id="toggleview"><i class="ui icon columns"></i>View</button> 
+                    <button class="ui basic button mini offsettop5 float-right d-none d-sm-block" id="toggleview"><i class="ui icon columns"></i>View</button> 
                     <a href="{{ url('personal/reports') }}" class="ui blue basic button mini offsettop5 float-right"><i class="ui icon chevron left"></i>Return</a>
                 </h2>
             </div>    
@@ -14,11 +14,27 @@
 
         <div class="row columnview">
 
+            <div class="colview col-md-12">
+               <form action="{{ url('personal/reports/asana-task') }}" method="post" accept-charset="utf-8" class="ui small form form-filter" id="filterform">
+                    {{ csrf_field() }}
+                    <div class="inline three fields">
+                        <div class="three wide field">
+                            <select name="type" class="ui search dropdown action getid">
+                                <option value="week" @if($type=='week') selected @endif>Work Week</option>
+                                <option value="month" @if($type=='month') selected @endif>Month</option>
+                                <option value="year" @if($type=='year') selected @endif>Year</option>
+                            </select>
+                        </div>
+                        <input type="hidden" name="emp_id" value="">
+                        <button id="btnfilter" class="ui icon button positive small inline-button"><i class="ui icon filter alternate"></i> Filter</button>
+                    </div>
+                </form>
+            </div>
 
             <div class="colview col-md-6">
                 <div class="box box-success">
                     <div class="box-header with-border">
-                        <h3 class="box-title">Completed Tasks</h3>
+                        <h3 class="box-title">Completed Tasks by {{ ucwords($type) }}</h3>
                     </div>
                     <div class="box-body">
                         <div class="canvas-wrapper">
@@ -31,7 +47,7 @@
             <div class="colview col-md-6">
                 <div class="box box-success">
                     <div class="box-header with-border">
-                        <h3 class="box-title">Overdue Tasks</h3>
+                        <h3 class="box-title">Overdue Tasks by {{ ucwords($type) }}</h3>
                     </div>
                     <div class="box-body">
                         <div class="canvas-wrapper">
@@ -44,7 +60,7 @@
             <div class="colview col-md-6">
                 <div class="box box-success">
                     <div class="box-header with-border">
-                        <h3 class="box-title">Completed On-time vs Overdue</h3>
+                        <h3 class="box-title">Completed On-time vs Overdue for This {{ ucwords($type) }}</h3>
                     </div>
                     <div class="box-body">
                         <div class="canvas-wrapper">
@@ -57,7 +73,7 @@
             <div class="colview col-md-6">
                 <div class="box box-success">
                     <div class="box-header with-border">
-                        <h3 class="box-title">Overdue Period Demographics</h3>
+                        <h3 class="box-title">Overdue Period Demographics for This {{ ucwords($type) }}</h3>
                     </div>
                     <div class="box-body">
                         <div class="canvas-wrapper">
@@ -198,16 +214,16 @@
         }
     });
 
-    // chart by ontive vs overdue
+    // chart by ontime vs overdue
     var ontime_vs_overdue = document.getElementById("ontime_vs_overdue");
     var myChart3 = new Chart(ontime_vs_overdue, {
         type: 'pie',
         data: {
             labels: [
-                @isset($dgc) @php foreach ($dgc as $key => $value) { echo '"' . $value . " - " . $key . '"' . ', '; } @endphp @endisset
+                @isset($toodata) @php foreach ($toodata as $key => $value) { echo '"' . $value . " - " . $key . '"' . ', '; } @endphp @endisset
             ],
             datasets: [{
-                data: [ @isset($gc) {{ $gc }} @endisset ],
+                data: [ @isset($too) {{ $too }} @endisset ],
                 backgroundColor: [
                     window.chartColors.green,
                     window.chartColors.red,
@@ -218,7 +234,7 @@
         options: {
             responsive: true,
             maintainAspectRatio: true,
-            legend: {display: false,fullWidth: true,position: 'right',},
+            legend: {display: true,fullWidth: true,position: 'top',},
             tooltips: {
                 callbacks: {
                     label: function(tooltipItem, data) {
@@ -242,7 +258,7 @@
     var mychart4 = new Chart(overdue_period, {
         type: 'radar',
         data: {
-            labels: ['1-2 days', '2-5 days', '5-7 days', '7-14 days', 'Over 14 days'],
+            labels: ['1-2 days', '3-5 days', '6-7 days', '8-14 days', 'Over 15 days'],
             datasets: [{
                 label: 'Tasks',
                 backgroundColor : "rgba(48, 164, 255, 0.2)",

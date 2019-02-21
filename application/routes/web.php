@@ -236,9 +236,9 @@ Route::group(['middleware' => 'auth'], function () {
 
 		Route::group(['middleware' => 'employee'], function () {
 			/*
-			|--------------------------------------------------------------------------
-			| Employee Frontend : Dashboard, Profile, Attendance, Schedules, Leaves, Settings
-			|--------------------------------------------------------------------------
+			|----------------------------------------------------------------------------------------
+			| Employee Frontend : Dashboard, Profile, Attendance, Schedules, Leaves, Report, Settings
+			|----------------------------------------------------------------------------------------
 			*/
 			// dashboard 
 			Route::get('personal/dashboard', 'personal\PersonalDashboardController@index');
@@ -280,6 +280,7 @@ Route::group(['middleware' => 'auth'], function () {
 			Route::get('personal/reports/employee-birthdays', 'personal\PersonalReportsController@empBday');
 			Route::get('personal/reports/user-accounts', 'personal\PersonalReportsController@userAccs');
 			Route::get('personal/reports/asana-task', 'personal\PersonalReportsController@asanaTask');
+			Route::post('personal/reports/asana-task', 'personal\PersonalReportsController@asanaTask');
 
 			// user 
 			Route::get('personal/update-user', 'personal\PersonalAccountController@viewUser');
