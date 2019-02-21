@@ -158,6 +158,81 @@
 
         </div>
          
+        @if($setting->enable_asana_report)
+        <div class="row">
+            <div class="col-md-12">
+            <h3 class="ui header">My Asana Reports</h3>
+            </div>    
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="info-box">
+                    <span class="info-box-icon bg-pink"><i class="ui icon tasks"></i></span>
+                    <div class="info-box-content">
+                        <span class="info-box-text">MY COMPLETED TASKS</span>
+                        <div class="progress-group">
+                            <div class="progress sm">
+                                <div class="progress-bar progress-bar-pink" style="width: 100%"></div>
+                            </div>
+                            <div class="stats_d">
+                                <table style="width: 100%;">
+                                    <tbody>
+                                        <tr>
+                                            <td>This Year</td>
+                                            <td>@isset($task_year) {{ $task_year }} @endisset</td>
+                                        </tr>
+                                        <tr>
+                                            <td>This Month</td>
+                                            <td>@isset($task_month) {{ $task_month }} @endisset</td>
+                                        </tr>
+                                        <tr>
+                                            <td>This Work Week ({{date('W')}}) </td>
+                                            <td>@isset($task_week) {{ $task_week }} @endisset</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="info-box">
+                    <span class="info-box-icon bg-orange"><i class="ui icon list ul"></i></span>
+                    <div class="info-box-content">
+                        <span class="info-box-text">MY THIS YEAR OVERDUE TASKS</span>
+                        <div class="progress-group">
+                            <div class="progress sm">
+                                <div class="progress-bar progress-bar-orange" style="width: 100%"></div>
+                            </div>
+                            <div class="stats_d">
+                                <table style="width: 100%;">
+                                    <tbody>
+                                        <tr>
+                                            <td>Overdue This Year</td>
+                                            <td>@isset($task_overdue_year) {{ $task_overdue_year }} @endisset</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Longest Overdue</td>
+                                            <td>@isset($task_longest_overdue_year) {{ $task_longest_overdue_year->overdue }} days @endisset</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Without Due Date</td>
+                                            <td>@isset($task_without_due_year) {{ $task_without_due_year }} @endisset</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        @endif
+
         @if($setting->enable_attendance)
         <div class="row">
             <div class="col-md-12">

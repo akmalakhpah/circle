@@ -112,7 +112,7 @@
                 @if($setting->enable_asana_report)
                 <li>
                     <a href="{{ url('asana-users') }}">
-                        <i class="ui icon user circle outline"></i>
+                        <i class="ui icon font"></i>
                         <p>Asana Users</p>
                     </a>
                 </li>
