@@ -20,7 +20,7 @@
                         <form action="{{ url('users/update/user') }}" class="ui form add-user" method="post" accept-charset="utf-8">
                         {{ csrf_field() }}
                             <div class="field">
-                                <label>Employee</label>
+                                <label>Staff</label>
                                 <input type="text" name="employee" value="@isset($u->name){{ $u->name }}@endisset" class="readonly uppercase" readonly>
                             </div>
                             <div class="field">

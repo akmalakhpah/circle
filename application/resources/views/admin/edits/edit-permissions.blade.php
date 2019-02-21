@@ -31,41 +31,41 @@
                         </div>
                         
 
-                        <h3 class="ui header">Employees</h3>
+                        <h3 class="ui header">Staff</h3>
                         <div class="item">
                             <div class="ui master checkbox">
                                 <input type="checkbox" @isset($d) @if(in_array('2', $d) == true) checked @endif @endisset name="perms[]" value="2">
-                                <label>View Employees</label>
+                                <label>View Staff</label>
                             </div>
                             <div class="list">
                                 <div class="item">
                                     <div class="ui child checkbox">
                                         <input type="checkbox" @isset($d) @if(in_array('21', $d) == true) checked @endif @endisset name="perms[]" value="21">
-                                        <label>Add Employees</label>
+                                        <label>Add Staff</label>
                                     </div>
                                 </div>
                                 <div class="item">
                                     <div class="ui child checkbox">
                                         <input type="checkbox" @isset($d) @if(in_array('22', $d) == true) checked @endif @endisset name="perms[]" value="22">
-                                        <label>View Employees</label>
+                                        <label>View Staff</label>
                                     </div>
                                 </div>
                                 <div class="item">
                                     <div class="ui child checkbox">
                                         <input type="checkbox" @isset($d) @if(in_array('23', $d) == true) checked @endif @endisset name="perms[]" value="23">
-                                        <label>Edit Employees</label>
+                                        <label>Edit Staff</label>
                                     </div>
                                 </div>
                                 <div class="item">
                                     <div class="ui child checkbox">
                                         <input type="checkbox" @isset($d) @if(in_array('24', $d) == true) checked @endif @endisset name="perms[]" value="24">
-                                        <label>Delete Employees</label>
+                                        <label>Delete Staff</label>
                                     </div>
                                 </div>
                                 <div class="item">
                                     <div class="ui child checkbox">
                                         <input type="checkbox" @isset($d) @if(in_array('25', $d) == true) checked @endif @endisset name="perms[]" value="25">
-                                        <label>Archive Employees</label>
+                                        <label>Archive Staff</label>
                                     </div>
                                 </div>
                             </div>

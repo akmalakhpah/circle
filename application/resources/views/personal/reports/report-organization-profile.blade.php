@@ -1,4 +1,4 @@
-@extends('layouts.default')
+@extends('layouts.personal')
     
     @section('content')
     
@@ -7,7 +7,7 @@
             <div class="col-md-12">
                 <h2 class="page-title">Organization Profile
                     <button class="ui basic button mini offsettop5 float-right" id="toggleview"><i class="ui icon columns"></i>View</button> 
-                    <a href="{{ url('reports') }}" class="ui blue basic button mini offsettop5 float-right"><i class="ui icon chevron left"></i>Return</a>
+                    <a href="{{ url('personal/reports') }}" class="ui blue basic button mini offsettop5 float-right"><i class="ui icon chevron left"></i>Return</a>
                 </h2>
             </div>    
         </div>

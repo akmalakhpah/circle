@@ -16,7 +16,7 @@
                             <tr>
                                 <th>Asana User Name</th>
                                 <th>Asana User Email</th>
-                                <th>Employee</th>
+                                <th>Staff</th>
                                 <th>Status</th>
                                 <th></th>
                             </tr>

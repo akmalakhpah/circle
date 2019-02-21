@@ -14,7 +14,7 @@
                         <thead>
                             <tr>
                                 <th>ID #</th>
-                                <th>Employee</th>
+                                <th>Staff</th>
                                 <th>Description</th>
                                 <th>Leave From</th>
                                 <th>Leave To</th>

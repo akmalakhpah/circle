@@ -8,7 +8,7 @@
     
     <div class="container-fluid">
         <div class="row">
-            <h2 class="page-title">Employee Leaves Report
+            <h2 class="page-title">Staff Leaves Report
                 <a href="{{ url('reports') }}" class="ui basic blue button mini offsettop5 float-right"><i class="ui icon chevron left"></i>Return</a>
             </h2>
         </div>
@@ -21,7 +21,7 @@
                         <div class="inline three fields">
                             <div class="three wide field">
                                 <select name="employee" class="ui search dropdown getid">
-                                    <option value="">Employee</option>
+                                    <option value="">Staff</option>
                                     @isset($employee)
                                         @foreach($employee as $e)
                                             <option value="{{ $e->lastname }}, {{ $e->firstname }}" data-id="{{ $e->idno }}">{{ $e->lastname }}, {{ $e->firstname }}</option>
@@ -49,7 +49,7 @@
                         <thead>
                             <tr>
                                 <th>ID #</th>
-                                <th>Employee Name</th>
+                                <th>Staff Name</th>
                                 <th>Type</th>
                                 <th>Leave from <span class="help">(date)</span></th>
                                 <th>Leave to <span class="help">(date)</span></th>

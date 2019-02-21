@@ -17,7 +17,7 @@
                             <tr>
                                 <th>ID #</th>
                                 <th>Date</th>
-                                <th>Employee</th>
+                                <th>Staff</th>
                                 <th>Time In</th>
                                 <th>Time Out</th>
                                 <th>Total Hours</th>

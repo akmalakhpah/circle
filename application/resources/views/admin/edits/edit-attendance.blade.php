@@ -25,7 +25,7 @@
                     @if($a->timeout != null)
                         <div class="two fields">
                             <div class="field">
-                                <label>Employee</label>
+                                <label>Staff</label>
                                 <input type="text" name="employee" class="readonly" readonly="" value="@isset($a->employee){{ $a->employee }}@endisset">
                             </div>
                             <div class="field">
@@ -35,7 +35,7 @@
                         </div>
                     @else 
                         <div class="field">
-                            <label>Employee</label>
+                            <label>Staff</label>
                             <input type="text" name="employee" class="readonly" readonly="" value="@isset($a->employee){{ $a->employee }}@endisset">
                         </div>
                     @endif

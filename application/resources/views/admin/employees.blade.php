@@ -4,7 +4,7 @@
 
     <div class="container-fluid">
         <div class="row">
-            <h2 class="page-title">EMPLOYEES
+            <h2 class="page-title">STAFF
                 <a class="ui positivex blue button mini offsettop5 float-right" href="{{ url('employees/new') }}"><i class="ui icon plus"></i>Add</a>
             </h2>
         </div>
@@ -16,7 +16,7 @@
                     <thead>
                         <tr>
                             <th>ID #</th> 
-                            <th>Employee</th> 
+                            <th>Staff</th> 
                             <th>Company</th>
                             <th>Department</th>
                             <th>Position</th>

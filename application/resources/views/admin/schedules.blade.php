@@ -27,7 +27,7 @@
                         <thead>
                             <tr>
                                 <th>ID #</th>
-                                <th>Employee</th>
+                                <th>Staff</th>
                                 <th>Time <span class="help">(Start - Off)</span></th>
                                 <th>Hours</th>
                                 <th>Rest Day<span class="help">(s)</span></th>

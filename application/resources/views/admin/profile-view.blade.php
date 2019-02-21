@@ -9,7 +9,7 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-12">
-                <h2 class="page-title">Employee Profile
+                <h2 class="page-title">Staff Profile
                     <a href="{{ url('employees') }}" class="ui basic blue button mini offsettop5 float-right"><i class="ui icon chevron left"></i>Return</a>
                 </h2>
             </div>    

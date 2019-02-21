@@ -32,7 +32,7 @@
                                 <td>{{ $val->name }}</td>
                                 <td>{{ $val->email }}</td>
                                 <td>{{ $val->role_name }}</td>
-                                <td> @if($val->acc_type == 2) Admin @else Employee @endif </td>
+                                <td> @if($val->acc_type == 2) Admin @else Staff @endif </td>
                                 <td>
                                     <span>
                                     @if($val->status == '1') 

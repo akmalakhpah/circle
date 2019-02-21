@@ -1,12 +1,11 @@
-@extends('layouts.default')
+@extends('layouts.personal')
     
     @section('content')
     
     <div class="container-fluid">
         <div class="row">
             <h2 class="page-title">Staff List Report
-                <a href="{{ url('export/report/employees') }}" class="ui basic button mini offsettop5 btn-export float-right"><i class="ui icon download"></i>Export to CSV</a>
-                <a href="{{ url('reports') }}" class="ui basic blue button mini offsettop5 float-right"><i class="ui icon chevron left"></i>Return</a>
+                <a href="{{ url('personal/reports') }}" class="ui basic blue button mini offsettop5 float-right"><i class="ui icon chevron left"></i>Return</a>
             </h2>
         </div>
 
@@ -16,7 +15,7 @@
                     <table width="100%" class="table table-striped table-hover" id="dataTables-example">
                         <thead>
                             <tr>
-                                <th>ID</th>
+                                <th>ID #</th>
                                 <th>Staff Name</th>
                                 <th>Age</th>
                                 <th>Gender</th>
@@ -31,7 +30,7 @@
                             @isset($empList)
                             @foreach ($empList as $et)
                                 <tr>
-                                    <td>{{ $et->id }}</td>
+                                    <td>{{ $et->idno }}</td>
                                     <td>{{ $et->lastname }}, {{ $et->firstname }} {{ $et->mi }}</td>
                                     <td>{{ $et->age }}</td>
                                     <td>{{ $et->gender }}</td>

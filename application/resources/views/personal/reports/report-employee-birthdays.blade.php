@@ -1,12 +1,11 @@
-@extends('layouts.default')
+@extends('layouts.personal')
 
     @section('content')
     
     <div class="container-fluid">
         <div class="row">
             <h2 class="page-title">Staff Birthdays
-                <a href="{{ url('export/report/birthdays') }}" class="ui basic button mini offsettop5 btn-export float-right"><i class="ui icon download"></i>Export to CSV</a>
-                <a href="{{ url('reports') }}" class="ui basic blue button mini offsettop5 float-right"><i class="ui icon chevron left"></i>Return</a>
+                <a href="{{ url('personal/reports') }}" class="ui basic blue button mini offsettop5 float-right"><i class="ui icon chevron left"></i>Return</a>
             </h2>   
         </div>
 

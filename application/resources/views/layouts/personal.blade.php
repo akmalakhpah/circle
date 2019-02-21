@@ -83,6 +83,14 @@
                     </a>
                 </li>
                 @endif
+                                
+                <li class="">
+                    <a href="{{ url('personal/reports') }}">
+                        <i class="ui icon chart bar outline"></i>
+                        <p>Reports</p>
+                    </a>
+                </li>
+
             </ul>
         </nav>
 

@@ -1,4 +1,4 @@
-@extends('layouts.default')
+@extends('layouts.personal')
     
     @section('styles')
     <link href="{{ asset('/assets/vendor/air-datepicker/dist/css/datepicker.min.css') }}" rel="stylesheet">
@@ -9,7 +9,7 @@
     <div class="container-fluid">
         <div class="row">
             <h2 class="page-title">Staff Attendance Report
-                <a href="{{ url('reports') }}" class="ui basic blue button mini offsettop5 float-right"><i class="ui icon chevron left"></i>Return</a>
+                <a href="{{ url('personal/reports') }}" class="ui basic blue button mini offsettop5 float-right"><i class="ui icon chevron left"></i>Return</a>
             </h2> 
         </div>
 

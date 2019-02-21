@@ -831,7 +831,7 @@
                                 <p class="license col-md-6" style="margin-bottom:0">
                                     <h3 style="margin-top:0">My Circle: Performance Management System</h3>
                                     <p>My Circle delivers the best performance management tool user experience, and functionality. My Circle is a user-friendly, intuitive system that provides smoothly integrated essential 
-                                            HR Time and Attendance functionality, Employee Management, Leave Management, Scheduling, Time tracking, and Attendance solution and more.</p>
+                                            HR Time and Attendance functionality, Staff Management, Leave Management, Scheduling, Time tracking, and Attendance solution and more.</p>
                                     <p>My Circle's smarter approach to Time and Attendance:</p>
                                     <ul>
                                         <li>Engage your people everywhere on their preferred devices.</li>
@@ -843,14 +843,14 @@
                                     <h3>My Circle Features</h3>
                                     <p>Manage the full worker attendance lifecycle from time tracking to scheduling using a single intuitive performance management system.</p>
                                     <ul>
-                                        <li>Employee Management (HRIS)</li>
+                                        <li>Staff Management (HRIS)</li>
                                         <li>Time and Attendance Management</li>
                                         <li>Scheduling</li>
                                         <li>Leave Management</li>
                                         <li>Reporting and Analytics</li>
                                         <li>Real-time Attendance Monitoring</li>
                                         <li>Multi-company</li>
-                                        <li>Manager and Employee self-service</li>
+                                        <li>Manager and Staff self-service</li>
                                     </ul>
                                     <div class="sub header">Version 1.0</div>
                                     <div class="sub header">Copyright (c) 2019 Akmal Akhpah</div>

@@ -7,7 +7,7 @@
 * Copyright 2019 Aidan Technologies
 * Website: https://github.com/akmalakhpah/circle
 */
-namespace App\Http\Controllers\admin;
+namespace App\Http\Controllers\personal;
 use DB;
 use DateTimeZone;
 use DateTime;
@@ -18,15 +18,14 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
 
-class ReportsController extends Controller
+class PersonalReportsController extends Controller
 {
     public function index() {
         if (permission::permitted('reports')=='fail'){ return view('errors.permission-denied'); }
 
         $setting = table::settings()->first();
-		$lastviews = table::reportviews()->get();
 
-    	return view('admin.reports', compact('lastviews','setting'));
+    	return view('personal.reports', compact('setting'));
     }
 
 	public function empList() {
@@ -35,8 +34,9 @@ class ReportsController extends Controller
 		$today = date('M, d Y');
 		table::reportviews()->where('report_id', 1)->update(['last_viewed' => $today]);
 
-		$empList = table::people()->get();
-		return view('admin.reports.report-employee-list', compact('empList'));
+		$empList = table::people()->join('tbl_company_data', 'tbl_people.id', '=', 'tbl_company_data.reference')->get();
+		
+		return view('personal.reports.report-employee-list', compact('empList'));
 	}
 
 	public function empAtten() {
@@ -48,7 +48,7 @@ class ReportsController extends Controller
 		$empAtten = table::attendance()->get();
 		$employee = table::people()->join('tbl_company_data', 'tbl_people.id', '=', 'tbl_company_data.reference')->where('tbl_people.employmentstatus', 'Active')->get();
 
-		return view('admin.reports.report-employee-attendance', compact('empAtten', 'employee'));
+		return view('personal.reports.report-employee-attendance', compact('empAtten', 'employee'));
 	}
 
 	public function empLeaves() {
@@ -59,7 +59,7 @@ class ReportsController extends Controller
 
 		$employee = table::people()->join('tbl_company_data', 'tbl_people.id', '=', 'tbl_company_data.reference')->where('tbl_people.employmentstatus', 'Active')->get();
 		$empLeaves = table::leaves()->get();
-		return view('admin.reports.report-employee-leaves', compact('empLeaves', 'employee'));
+		return view('personal.reports.report-employee-leaves', compact('empLeaves', 'employee'));
 	}
 
 	public function empSched() {
@@ -70,7 +70,7 @@ class ReportsController extends Controller
 
 		$empSched = table::schedules()->orderBy('archive', 'ASC')->get();
 		$employee = table::people()->join('tbl_company_data', 'tbl_people.id', '=', 'tbl_company_data.reference')->where('tbl_people.employmentstatus', 'Active')->get();
-		return view('admin.reports.report-employee-schedule', compact('empSched', 'employee'));
+		return view('personal.reports.report-employee-schedule', compact('empSched', 'employee'));
 	}
 
 	public function orgProfile() {
@@ -126,7 +126,7 @@ class ReportsController extends Controller
 		
 		$orgProfile = table::companydata()->get();
 
-		return view('admin.reports.report-organization-profile', compact('orgProfile', 'age_group', 'gc', 'dgc', 'cg', 'csc', 'yc', 'yhc', 'dc', 'dpc', 'dcc', 'cc'));
+		return view('personal.reports.report-organization-profile', compact('orgProfile', 'age_group', 'gc', 'dgc', 'cg', 'csc', 'yc', 'yhc', 'dc', 'dpc', 'dcc', 'cc'));
 	}
 
 	public function empBday() {
@@ -136,7 +136,7 @@ class ReportsController extends Controller
 		table::reportviews()->where('report_id', 7)->update(['last_viewed' => $today]);
 
 		$empBday = table::people()->join('tbl_company_data', 'tbl_people.id', '=', 'tbl_company_data.reference')->get();
-		return view('admin.reports.report-employee-birthdays', compact('empBday'));
+		return view('personal.reports.report-employee-birthdays', compact('empBday'));
 	}
 
 	public function userAccs() {
@@ -146,7 +146,7 @@ class ReportsController extends Controller
 		table::reportviews()->where('report_id', 6)->update(['last_viewed' => $today]);
 
 		$userAccs = table::users()->get();
-		return view('admin.reports.report-user-accounts', compact('userAccs'));
+		return view('personal.reports.report-user-accounts', compact('userAccs'));
 	}
 
 	public function getEmpAtten(Request $request) {

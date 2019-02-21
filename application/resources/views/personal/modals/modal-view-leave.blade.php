@@ -3,7 +3,7 @@
     <div class="content">
         <form action="" class="ui form" method="post" accept-charset="utf-8">
             <div class="field">
-                <label>Employee</label>
+                <label>Staff</label>
                 <input type="text" class="employee uppercase readonly" value="" readonly="">
             </div>
             <div class="field">

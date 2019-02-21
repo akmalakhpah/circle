@@ -4,9 +4,9 @@
         <form action="{{ url('users/register') }}" class="ui form add-user" method="post" accept-charset="utf-8">
         {{ csrf_field() }}
             <div class="field">
-                <label>Employee</label>
+                <label>Staff</label>
                 <select class="ui search dropdown getemail uppercase" name="name">
-                    <option value="">Select Employee</option>
+                    <option value="">Select Staff</option>
                     @isset($employees)
                     @foreach ($employees as $data)
                         <option value="{{ $data->lastname }}, {{ $data->firstname }}" data-e="{{ $data->emailaddress }}" data-ref="{{ $data->id }}">{{ $data->lastname }}, {{ $data->firstname }}</option>

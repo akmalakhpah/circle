@@ -9,7 +9,7 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-12">
-                <h2 class="page-title">Edit Employee Profile
+                <h2 class="page-title">Edit Staff Profile
                     <a href="{{ url('employees') }}" class="ui basic blue button mini offsettop5 float-right"><i class="ui icon chevron left"></i>Return</a>
                 </h2>
             </div>    
@@ -110,7 +110,7 @@
                     </div>
                     <div class="col-md-6 float-left">
                         <div class="box box-success">
-                            <div class="box-header with-border">Employee Details</div>
+                            <div class="box-header with-border">Staff Details</div>
                             <div class="box-body">
                                 <h4 class="ui dividing header">Designation</h4>
                                 <div class="field">

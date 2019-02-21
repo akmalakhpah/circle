@@ -21,7 +21,7 @@
                 <form action="{{ url('schedules/update') }}" class="ui form" method="post" accept-charset="utf-8">
                 {{ csrf_field() }}
                     <div class="field">
-                        <label>Employee</label>
+                        <label>Staff</label>
                         <input type="text" value="@isset($s->employee){{ $s->employee }}@endisset" name="employee" class="readonly" readonly="" />
                     </div>
 

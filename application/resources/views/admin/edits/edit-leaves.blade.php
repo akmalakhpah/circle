@@ -16,7 +16,7 @@
                 <form action="{{ url('leaves/update') }}" class="ui form" method="post" accept-charset="utf-8">
                 {{ csrf_field() }}
                     <div class="field">
-                        <label>Employee</label>
+                        <label>Staff</label>
                         <input type="text" class="readonly" readonly="" value="@isset($l->employee){{ $l->employee }}@endisset">
                     </div>
                     <div class="field">

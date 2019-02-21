@@ -68,7 +68,7 @@
                 <li class="">
                     <a href="{{ url('employees') }}">
                         <i class="ui icon users"></i>
-                        <p>Employees</p>
+                        <p>Staffs</p>
                     </a>
                 </li>
                     
@@ -150,7 +150,7 @@
                                     <i class="ui icon th"></i> <span class="navmenutext">Quick Access</span>
                                     <i class="dropdown icon"></i>
                                     <div class="menu" tabindex="-1">
-                                      <a href="{{ url('employees/new') }}" class="item"><i class="ui icon user plus"></i> Add Employee</a>
+                                      <a href="{{ url('employees/new') }}" class="item"><i class="ui icon user plus"></i> Add Staff</a>
                                       @if($setting->enable_attendance)
                                       <a href="{{ url('clock') }}" target="_blank" class="item"><i class="ui icon clock"></i> Clock In/Out</a>
                                       @endif

@@ -4,9 +4,9 @@
         <form action="{{ url('schedules/add') }}" class="ui form" method="post" accept-charset="utf-8">
         {{ csrf_field() }}
             <div class="field">
-                <label>Employee</label>
+                <label>Staff</label>
                 <select class="ui search dropdown getid uppercase" name="employee">
-                    <option value="">Select Employee</option>
+                    <option value="">Select Staff</option>
                     @isset($employee)
                     @foreach ($employee as $data)
                         <option value="{{ $data->lastname }}, {{ $data->firstname }}" data-id="{{ $data->id }}">{{ $data->lastname }}, {{ $data->firstname }}</option>

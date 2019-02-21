@@ -268,6 +268,18 @@ Route::group(['middleware' => 'auth'], function () {
 			// settings 
 			Route::get('personal/settings', 'personal\PersonalSettingsController@index');
 
+			// reports
+			Route::get('personal/reports', 'personal\PersonalReportsController@index');
+			Route::get('personal/reports/employee-list', 'personal\PersonalReportsController@empList');
+			Route::get('personal/reports/employee-attendance', 'personal\PersonalReportsController@empAtten');
+			Route::get('personal/reports/individual-attendance', 'personal\PersonalReportsController@indiAtten');
+			Route::get('personal/reports/employee-leaves', 'personal\PersonalReportsController@empLeaves');
+			Route::get('personal/reports/individual-leaves', 'personal\PersonalReportsController@indiLeaves');
+			Route::get('personal/reports/employee-schedule', 'personal\PersonalReportsController@empSched');
+			Route::get('personal/reports/organization-profile', 'personal\PersonalReportsController@orgProfile');
+			Route::get('personal/reports/employee-birthdays', 'personal\PersonalReportsController@empBday');
+			Route::get('personal/reports/user-accounts', 'personal\PersonalReportsController@userAccs');
+
 			// user 
 			Route::get('personal/update-user', 'personal\PersonalAccountController@viewUser');
 			Route::get('personal/update-password', 'personal\PersonalAccountController@viewPassword');
