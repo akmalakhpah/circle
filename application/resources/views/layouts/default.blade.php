@@ -135,12 +135,10 @@
                         <i class="ui icon bars"></i>
                     </button>
 
-                    <div class="align-left">
-                        <div class="logo">
+                    <div class="logo">
                         <a href="/" class="simple-text">
                             <img src="{{ asset('/assets/images/img/logo-dark.png') }}">
                         </a>
-                        </div>
                     </div>
 
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">

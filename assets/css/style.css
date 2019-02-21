@@ -218,6 +218,8 @@ a[data-toggle="collapse"] {
 .logo {
     padding: 0px;
     margin: 0px;
+    max-width: 50%;
+    overflow: visible;
 }
 
 .logo .simple-text {
@@ -1547,6 +1549,6 @@ span.teal {
     }
 }
 
-.navbar>.container, .navbar>.container-fluid {
+navbar>.container, .navbar>.container-fluid {
     justify-content: initial;
 }
