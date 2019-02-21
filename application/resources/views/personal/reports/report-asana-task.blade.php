@@ -135,7 +135,7 @@
                 label: 'Department Average',
                 backgroundColor:  window.chartColors.rgrey_clear,
                 borderColor: window.chartColors.grey,
-                data: [ @isset($ctddata) {{ $ctddata }} @endisset ],
+                data: [ @isset($ctddata_avg) {{ $ctddata_avg }} @endisset ],
                 fill: true,
             }]
         },
@@ -150,7 +150,7 @@
                     display: true,
                     scaleLabel: {
                         display: true,
-                        labelString: 'Year'
+                        labelString: '{{ ucwords($type) }}'
                     }
                 }],
                 yAxes: [{
@@ -171,20 +171,20 @@
     var myChart2 = new Chart(overduetasks, {
         type: 'line',
         data: {
-            labels: [ @isset($ctp) @php foreach ($ctp as $key => $value) { echo '"' . $key . '"' . ', '; } @endphp @endisset],
+            labels: [ @isset($cop) @php foreach ($cop as $key => $value) { echo '"' . $key . '"' . ', '; } @endphp @endisset],
             datasets: [
             {
                 label: 'Personal',
                 backgroundColor:  window.chartColors.red_clear,
                 borderColor: window.chartColors.red,
-                data: [ @isset($ctpdata) {{ $ctpdata }} @endisset ],
+                data: [ @isset($copdata) {{ $copdata }} @endisset ],
                 fill: true,
             },
             {
                 label: 'Department Average',
                 backgroundColor:  window.chartColors.rgrey_clear,
                 borderColor: window.chartColors.grey,
-                data: [ @isset($ctddata) {{ $ctddata }} @endisset ],
+                data: [ @isset($coddata_avg) {{ $coddata_avg }} @endisset ],
                 fill: true,
             }
             ]
@@ -200,7 +200,7 @@
                     display: true,
                     scaleLabel: {
                         display: true,
-                        labelString: 'Year'
+                        labelString: '{{ ucwords($type) }}'
                     }
                 }],
                 yAxes: [{

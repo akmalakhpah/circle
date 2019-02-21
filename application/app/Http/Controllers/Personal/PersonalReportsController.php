@@ -220,8 +220,13 @@ class PersonalReportsController extends Controller
 		$id = \Auth::user()->reference;
 
         $department = table::companydata()->where('reference',$id)->first()->department;
-        $department_members = table::companydata()->leftjoin('tbl_people','tbl_company_data.reference','=','tbl_people.id')->where('department',$department)->where('tbl_people.employmentstatus', 'Active')->count();
-		
+        $department_members = table::companydata()->select('gid')->leftjoin('tbl_people','tbl_company_data.reference','=','tbl_people.id')->leftjoin('tbl_asana_users','tbl_asana_users.reference','=','tbl_people.id')->where('department',$department)->where('tbl_people.employmentstatus', 'Active')->get()->toArray();
+        $department_members_gid = array();
+        foreach ($department_members as $value) {
+        	$department_members_gid[] = $value->gid;
+        }
+        $department_members = count($department_members);
+
 		$user_gid = table::asana_users()->where('reference', $id)->first();
 		if(isset($user_gid))
 			$user_gid = $user_gid->gid;
@@ -234,25 +239,32 @@ class PersonalReportsController extends Controller
         switch($type){
             case 'week':
             	$datefilter = "(YEAR(curdate()) = YEAR(completed_at) AND WEEK(curdate()) = WEEK(completed_at))";
+            	$dateallfilter = "(completed_at > DATE_SUB(DATE_SUB(curdate(), INTERVAL day(curdate())-1 DAY), INTERVAL 2 MONTH))";
+            	$datedisplay = "W";
+
                 break;
 
             case 'month':
             	$datefilter = "(YEAR(curdate()) = YEAR(completed_at) AND MONTH(curdate()) = MONTH(completed_at))";
+            	$dateallfilter = "(completed_at > DATE_SUB(DATE_SUB(curdate(), INTERVAL day(curdate())-1 DAY), INTERVAL 12 MONTH))";
+            	$datedisplay = "Y-m";
                 break;
 
             case 'year':
             	$datefilter = "(YEAR(curdate()) = YEAR(completed_at))";
+            	$dateallfilter = "(YEAR(curdate()) >= YEAR(completed_at))";
+            	$datedisplay = "Y";
                 break;
 
             default:
             	$datefilter = "(YEAR(curdate()) = YEAR(completed_at) AND MONTH(curdate()) = MONTH(completed_at) AND DAY(curdate()) = DAY(completed_at))";
+            	$dateallfilter = "(completed_at > DATE_SUB(DATE_SUB(curdate(), INTERVAL day(curdate())-1 DAY), INTERVAL 1 MONTH))";
+            	$datedisplay = "Y-m-d";
                 break;
         }
 
 		$today = date('M, d Y');
 		//table::reportviews()->where('report_id', 5)->update(array('last_viewed' => $today));
-
-		$ed = table::people()->join('tbl_company_data', 'tbl_people.id', '=', 'tbl_company_data.reference')->where('tbl_people.employmentstatus', 'Active')->get();
 
 		//task_ontime_overdue
 		$task_ontime_overdue = table::asana_tasks()
@@ -265,17 +277,63 @@ class PersonalReportsController extends Controller
 		foreach ($task_ontime_overdue as $g) { $status[] = $g->status; $toodata = array_count_values($status); }
 		$too = implode($toodata, ', ') . ',';
 
-		// chart year hired
-		foreach ($ed as $yearhired) {
-			$year_p[] = date("Y", strtotime($yearhired->startdate));
-			$year_d[] = date("Y", strtotime($yearhired->dateregularized));
+		// completed task
+		$task_completed = table::asana_tasks()->where('user_gid',$user_gid)
+		   	->whereRaw('((completed_at < due_on) OR (due_on IS NULL))')
+		   	->whereNotNull('completed_at')
+			->whereRaw($dateallfilter)
+		   	->get();
+		$task_completed_d = table::asana_tasks()->whereIn('user_gid',$department_members_gid)
+		   	->whereRaw('((completed_at < due_on) OR (due_on IS NULL))')
+		   	->whereNotNull('completed_at')
+			->whereRaw($dateallfilter)
+		   	->get();
+		$task_overdue = table::asana_tasks()->where('user_gid',$user_gid)
+		   	->whereRaw('(((completed_at > due_on) AND (due_on IS NOT NULL)))')
+		   	->whereNotNull('completed_at')
+			->whereRaw($dateallfilter)
+		   	->get();
+		$task_overdue_d = table::asana_tasks()->whereIn('user_gid',$department_members_gid)
+		   	->whereRaw('(((completed_at > due_on) AND (due_on IS NOT NULL)))')
+		   	->whereNotNull('completed_at')
+			->whereRaw($dateallfilter)
+		   	->get();
+
+		   	//dd($task_completed_d);
+		foreach ($task_completed as $task) {
+			$completed_p[] = date($datedisplay, strtotime($task->completed_at));
 		}
-		asort($year_p); 
-		asort($year_d); 
-		$ctp = array_count_values($year_p);
+		foreach ($task_overdue as $task) {
+			$overdue_p[] = date($datedisplay, strtotime($task->completed_at));
+		}
+		foreach ($task_completed_d as $task) {
+			$completed_d[] = date($datedisplay, strtotime($task->completed_at));
+		}
+		foreach ($task_overdue_d as $task) {
+			$overdue_d[] = date($datedisplay, strtotime($task->completed_at));
+		}
+		//dd($task_completed);
+		asort($completed_p); 
+		asort($completed_d); 
+		asort($overdue_p); 
+		asort($overdue_d);
+		$ctp = array_count_values($completed_p); 
 		$ctpdata = implode($ctp, ', ') . ',';
-		$ctd = array_count_values($year_d);
+		$ctd = array_count_values($completed_d);
 		$ctddata = implode($ctd, ', ') . ',';
+		foreach ($ctd as $value) {
+			$ctd_avg[] = ($value/$department_members);
+		}
+		$ctddata_avg = implode($ctd_avg, ', ') . ',';
+
+		$cop = array_count_values($overdue_p);
+		$copdata = implode($cop, ', ') . ',';
+		$cod = array_count_values($overdue_d);
+		$coddata = implode($cod, ', ') . ',';
+		foreach ($cod as $value) {
+			$cod_avg[] = ($value/$department_members);
+		}
+		$coddata_avg = implode($cod_avg, ', ') . ',';
 		
 		$orgProfile = table::companydata()->get();
 
@@ -311,7 +369,8 @@ class PersonalReportsController extends Controller
 		return view('personal.reports.report-asana-task', 
 			compact(
 				'orgProfile', 'gc', 'dgc', 'cg', 'csc',
-		 		'ctpdata', 'ctp', 'ctddata', 'ctd',
+		 		'ctpdata', 'ctp', 'ctddata', 'ctd', 'ctddata_avg',
+		 		'copdata', 'cop', 'coddata', 'cod', 'coddata_avg',
 		 		'toodata','too',
 		 		'overdue_period',
 		 		'type'
