@@ -23,14 +23,14 @@ class CronController extends Controller
     public function asana($type,$key){
 
         //get Cron job key
-        if($key !== env("CRON_KEY")){
+        if($key !== config('app.cron_key')){
             return response()->json([
                 "error" => "Whoops! Please use valid key to call the Cron job"
             ]);            
         }
 
         //get Asana personal access token
-        $token = env('ASANA_PERSONAL_ACCESS_TOKEN');
+        $token = config('app.asana_personal_access_token');
         if(!isset($token)){
             return response()->json([
                 "error" => "Whoops! Missing Asana personal access token"
@@ -250,7 +250,7 @@ class CronController extends Controller
    public function asanaJob($key){
 
         //get Cron job key
-        if($key !== env("CRON_KEY")){
+        if($key !== config('app.cron_key')){
             return response()->json([
                 "error" => "Whoops! Please use valid key to call the Cron job"
             ]);            
@@ -262,7 +262,7 @@ class CronController extends Controller
         if(isset($asana_jobs)){
 
             //get Asana personal access token
-            $token = env('ASANA_PERSONAL_ACCESS_TOKEN');
+            $token = config('app.asana_personal_access_token');
             if(!isset($token)){
                 return response()->json([
                     "error" => "Whoops! Missing Asana personal access token"

@@ -778,7 +778,7 @@
                                                 <label>Cron URL for Asana Report</label>
                                                 <div class="ui action input">
                                                   <input type="text" value="{{ url('/cron/asana-job/') }}/{{ env('CRON_KEY') }}">
-                                                  <a class="ui teal right labeled icon button" href="{{ url('/cron/asana-job/') }}/{{ env('CRON_KEY') }}" target="_blank"> 
+                                                  <a class="ui teal right labeled icon button" href="{{ url('/cron/asana-job/') }}/{{ config('app.cron_key') }}" target="_blank"> 
                                                     <i class="copy icon"></i>Copy
                                                   </a>
                                                 </div>
