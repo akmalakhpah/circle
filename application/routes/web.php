@@ -241,6 +241,7 @@ Route::group(['middleware' => 'auth'], function () {
 			|----------------------------------------------------------------------------------------
 			*/
 			// dashboard 
+			Route::get('/', 'personal\PersonalDashboardController@index');
 			Route::get('personal/dashboard', 'personal\PersonalDashboardController@index');
 
 			// profile 

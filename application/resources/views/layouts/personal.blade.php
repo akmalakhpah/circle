@@ -130,6 +130,9 @@
                                     <div class="menu" tabindex="-1">
                                       <a href="{{ url('personal/update-user') }}" class="item"><i class="ui icon user"></i> Update User</a>
                                       <a href="{{ url('personal/update-password') }}" class="item"><i class="ui icon lock"></i>  Change Password</a>
+                                      @if(Auth::user()->acc_type == '2')
+                                      <a href="{{ url('dashboard') }}" target="_blank" class="item"><i class="ui icon shield alternate"></i> Switch to Admin</a>
+                                      @endif
                                       <div class="divider"></div>
                                       <a href="{{ url('logout') }}" class="item"><i class="ui icon power"></i> Logout</a>
                                     </div>
