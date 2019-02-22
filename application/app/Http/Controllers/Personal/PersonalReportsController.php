@@ -224,7 +224,10 @@ class PersonalReportsController extends Controller
 		if(isset($user_gid))
 			$user_gid = $user_gid->gid;
 
-        $department = table::companydata()->where('reference',$id)->first()->department;
+        $department = table::companydata()->where('reference',$id)->first();
+        if(isset($department))
+        	$department = $department->department;
+
         $department_members = table::companydata()->select('gid')->leftjoin('tbl_people','tbl_company_data.reference','=','tbl_people.id')->leftjoin('tbl_asana_users','tbl_asana_users.reference','=','tbl_people.id')->where('department',$department)->where('tbl_people.employmentstatus', 'Active')->get()->toArray();
         $department_members_gid = array();
         foreach ($department_members as $value) {
@@ -279,7 +282,10 @@ class PersonalReportsController extends Controller
 			->get();
 
 		foreach ($task_ontime_overdue as $g) { $status[] = $g->status; $toodata = array_count_values($status); }
-		$too = implode($toodata, ', ') . ',';
+		if(isset($toodata))
+			$too = implode($toodata, ', ') . ',';
+		else
+			$too = '';
 
 		// completed task
 		$task_completed = table::asana_tasks()->where('user_gid',$user_gid)

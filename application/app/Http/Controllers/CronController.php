@@ -70,7 +70,7 @@ class CronController extends Controller
                     $users = $client->users->findByWorkspace($ws_gid,array(),array('opt_fields' => 'id,name,email'));
                     foreach ($users as $user) {
 
-                        $asana_user = table::asana_users()->where("gid",$user->id)->count();
+                        $asana_user = table::asana_users()->where("workspace_gid",$ws_gid)->where("gid",$user->id)->count();
 
                         if($asana_user < 1){
                             $path = sprintf("/users/%s/user_task_list", $user->id);
@@ -81,19 +81,22 @@ class CronController extends Controller
                                 $user_task_list_gid = $user_task_list->id;
 
                             $asana_user = table::asana_users()->updateOrInsert(
-                                ['gid' => $user->id],
+                                [
+                                    'gid' => $user->id,
+                                    'workspace_gid' => $ws_gid
+                                ],
                                 [   'email' => $user->email, 
                                     'name' => $user->name,
                                     'user_task_list_gid' => $user_task_list_gid,
-                                    'workspace_gid' => $ws_gid,
                                 ]
                             );
                         } else {
                             $asana_user = table::asana_users()->updateOrInsert(
-                                ['gid' => $user->id],
+                                [   'gid' => $user->id,
+                                    'workspace_gid' => $ws_gid
+                                ],
                                 [   'email' => $user->email, 
                                     'name' => $user->name,
-                                    'workspace_gid' => $ws_gid,
                                 ]
                             );
                         }
@@ -303,7 +306,7 @@ class CronController extends Controller
                         $users = $client->users->findByWorkspace($ws_gid,array(),array('opt_fields' => 'id,name,email'));
                         foreach ($users as $user) {
 
-                            $asana_user = table::asana_users()->where("gid",$user->id)->count();
+                            $asana_user = table::asana_users()->where("workspace_gid",$ws_gid)->where("gid",$user->id)->count();
 
                             if($asana_user < 1){
                                 $path = sprintf("/users/%s/user_task_list", $user->id);
@@ -314,19 +317,23 @@ class CronController extends Controller
                                     $user_task_list_gid = $user_task_list->id;
 
                                 $asana_user = table::asana_users()->updateOrInsert(
-                                    ['gid' => $user->id],
+                                    [
+                                        'gid' => $user->id,
+                                        'workspace_gid' => $ws_gid
+                                    ],
                                     [   'email' => $user->email, 
                                         'name' => $user->name,
                                         'user_task_list_gid' => $user_task_list_gid,
-                                        'workspace_gid' => $ws_gid,
                                     ]
                                 );
                             } else {
                                 $asana_user = table::asana_users()->updateOrInsert(
-                                    ['gid' => $user->id],
+                                    [
+                                        'gid' => $user->id,
+                                        'workspace_gid' => $ws_gid
+                                    ],
                                     [   'email' => $user->email, 
                                         'name' => $user->name,
-                                        'workspace_gid' => $ws_gid,
                                     ]
                                 );
                             }
