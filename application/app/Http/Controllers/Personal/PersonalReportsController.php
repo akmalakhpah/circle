@@ -67,7 +67,7 @@ class PersonalReportsController extends Controller
 		$today = date('M, d Y');
 		table::reportviews()->where('report_id', 5)->update(array('last_viewed' => $today));
 
-		$ed = table::people()->join('tbl_company_data', 'tbl_people.id', '=', 'tbl_company_data.reference')->where('tbl_people.employmentstatus', 'Active')->get();
+		$ed = table::people()->join('tbl_company_data', 'tbl_people.id', '=', 'tbl_company_data.reference')->where('tbl_people.employmentstatus', 'Active')->orderBy('tbl_company_data.company')->orderBy('tbl_company_data.department')->get();
 		
 		// age count 0-19 bracket
 		$age_18_24 = table::people()->where([['age', '>=', '18'], ['age', '<=', '24']])->count();

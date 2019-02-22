@@ -255,7 +255,7 @@
     var mychart2 = new Chart(age_group, {
         type: 'radar',
         data: {
-            labels: ['Age 18-24', 'Age 25-31', 'Age 32-38', 'Age 39-45', 'Age 46-100+'],
+            labels: ['Age 18-24', 'Age 25-31', 'Age 32-38', 'Age 39-45', 'Age 46+'],
             datasets: [{
                 label: 'Headcount',
                 backgroundColor : "rgba(48, 164, 255, 0.2)",
