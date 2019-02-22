@@ -136,7 +136,7 @@
                     </button>
 
                     <div class="logo">
-                        <a href="/" class="simple-text">
+                        <a href="/dashboard" class="simple-text">
                             <img src="{{ asset('/assets/images/img/logo-dark.png') }}">
                         </a>
                     </div>
