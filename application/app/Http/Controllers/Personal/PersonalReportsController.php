@@ -21,16 +21,12 @@ use App\Http\Controllers\Controller;
 class PersonalReportsController extends Controller
 {
     public function index() {
-        if (permission::permitted('reports')=='fail'){ return view('errors.permission-denied'); }
-
         $setting = table::settings()->first();
 
     	return view('personal.personal-reports', compact('setting'));
     }
 
 	public function empList() {
-		if (permission::permitted('reports')=='fail'){ return view('errors.permission-denied'); }
-		
 		$today = date('M, d Y');
 		table::reportviews()->where('report_id', 1)->update(['last_viewed' => $today]);
 
@@ -40,8 +36,6 @@ class PersonalReportsController extends Controller
 	}
 
 	public function empAtten() {
-		if (permission::permitted('reports')=='fail'){ return view('errors.permission-denied'); }
-		
 		$today = date('M, d Y');
 		table::reportviews()->where('report_id', 2)->update(array('last_viewed' => $today));
 
@@ -52,8 +46,6 @@ class PersonalReportsController extends Controller
 	}
 
 	public function empLeaves() {
-		if (permission::permitted('reports')=='fail'){ return view('errors.permission-denied'); }
-		
 		$today = date('M, d Y');
 		table::reportviews()->where('report_id', 3)->update(array('last_viewed' => $today));
 
@@ -63,8 +55,6 @@ class PersonalReportsController extends Controller
 	}
 
 	public function empSched() {
-		if (permission::permitted('reports')=='fail'){ return view('errors.permission-denied'); }
-		
 		$today = date('M, d Y');
 		table::reportviews()->where('report_id', 4)->update(array('last_viewed' => $today));
 
@@ -74,8 +64,6 @@ class PersonalReportsController extends Controller
 	}
 
 	public function orgProfile() {
-		if (permission::permitted('reports')=='fail'){ return view('errors.permission-denied'); }
-		
 		$today = date('M, d Y');
 		table::reportviews()->where('report_id', 5)->update(array('last_viewed' => $today));
 
@@ -130,8 +118,6 @@ class PersonalReportsController extends Controller
 	}
 
 	public function empBday() {
-		if (permission::permitted('reports')=='fail'){ return view('errors.permission-denied'); }
-		
 		$today = date('M, d Y');
 		table::reportviews()->where('report_id', 7)->update(['last_viewed' => $today]);
 
@@ -140,8 +126,6 @@ class PersonalReportsController extends Controller
 	}
 
 	public function userAccs() {
-		if (permission::permitted('reports')=='fail'){ return view('errors.permission-denied'); }
-		
 		$today = date('M, d Y');
 		table::reportviews()->where('report_id', 6)->update(['last_viewed' => $today]);
 
@@ -150,7 +134,6 @@ class PersonalReportsController extends Controller
 	}
 
 	public function getEmpAtten(Request $request) {
-
 		$id = $request->id;
 		$datefrom = $request->datefrom;
 		$dateto = $request->dateto;
@@ -175,7 +158,6 @@ class PersonalReportsController extends Controller
 	}
 
 	public function getEmpLeav(Request $request) {
-
 		$id = $request->id;
 		$datefrom = $request->datefrom;
 		$dateto = $request->dateto;
@@ -200,7 +182,6 @@ class PersonalReportsController extends Controller
 	}
 
 	public function getEmpSched(Request $request) {
-		
 		$id = $request->id;
 		
 		if ($id == null) {
@@ -215,10 +196,7 @@ class PersonalReportsController extends Controller
 	}
 
 	public function asanaTask(Request $request) {
-		if (permission::permitted('reports')=='fail'){ return view('errors.permission-denied'); }
-		
 		$id = \Auth::user()->reference;
-
 
 		$user_gid = table::asana_users()->where('reference', $id)->first();
 		if(isset($user_gid))
