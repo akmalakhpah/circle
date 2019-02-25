@@ -122,7 +122,7 @@
     var myChart1 = new Chart(completedtasks, {
         type: 'line',
         data: {
-            labels: [ @isset($ctp) @php foreach ($ctp as $key => $value) { echo '"' . $key . '"' . ', '; } @endphp @endisset],
+            labels: [ @isset($ct) @php foreach ($ct as $key => $value) { echo '"' . $key . '"' . ', '; } @endphp @endisset],
             datasets: [
             {
                 label: 'Personal',
@@ -132,7 +132,7 @@
                 fill: true,
             },
             {
-                label: 'Department Average',
+                label: 'Other Department Members Average {{$department}}',
                 backgroundColor:  window.chartColors.rgrey_clear,
                 borderColor: window.chartColors.grey,
                 data: [ @isset($ctddata_avg) {{ $ctddata_avg }} @endisset ],
@@ -171,7 +171,7 @@
     var myChart2 = new Chart(overduetasks, {
         type: 'line',
         data: {
-            labels: [ @isset($cop) @php foreach ($cop as $key => $value) { echo '"' . $key . '"' . ', '; } @endphp @endisset],
+            labels: [ @isset($ct) @php foreach ($ct as $key => $value) { echo '"' . $key . '"' . ', '; } @endphp @endisset],
             datasets: [
             {
                 label: 'Personal',
@@ -181,7 +181,7 @@
                 fill: true,
             },
             {
-                label: 'Department Average',
+                label: 'Other Department Members {{$department}}',
                 backgroundColor:  window.chartColors.rgrey_clear,
                 borderColor: window.chartColors.grey,
                 data: [ @isset($coddata_avg) {{ $coddata_avg }} @endisset ],

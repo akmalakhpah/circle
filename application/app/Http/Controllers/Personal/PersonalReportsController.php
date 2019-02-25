@@ -225,7 +225,7 @@ class PersonalReportsController extends Controller
             case 'week':
             	$datefilter = "(YEAR(curdate()) = YEAR(completed_at) AND WEEK(curdate()) = WEEK(completed_at))";
             	$dateallfilter = "(completed_at > DATE_SUB(DATE_SUB(curdate(), INTERVAL day(curdate())-1 DAY), INTERVAL 2 MONTH))";
-            	$datedisplay = "W";
+            	$datedisplay = "Y-W";
 
                 break;
 
@@ -266,70 +266,97 @@ class PersonalReportsController extends Controller
 			$too = '';
 
 		// completed task
-		$task_completed = table::asana_tasks()->where('user_gid',$user_gid)
+		$task_completed = table::asana_tasks()->select('completed_at')->where('user_gid',$user_gid)
 		   	->whereRaw('((completed_at < due_on) OR (due_on IS NULL))')
 		   	->whereNotNull('completed_at')
 			->whereRaw($dateallfilter)
 		   	->get();
-		$task_completed_d = table::asana_tasks()->whereIn('user_gid',$department_members_gid)
+		$task_completed_d = table::asana_tasks()->select('completed_at')->whereIn('user_gid',$department_members_gid)
 		   	->whereRaw('((completed_at < due_on) OR (due_on IS NULL))')
 		   	->whereNotNull('completed_at')
 			->whereRaw($dateallfilter)
 		   	->get();
-		$task_overdue = table::asana_tasks()->where('user_gid',$user_gid)
+		$task_overdue = table::asana_tasks()->select('completed_at')->where('user_gid',$user_gid)
 		   	->whereRaw('(((completed_at > due_on) AND (due_on IS NOT NULL)))')
 		   	->whereNotNull('completed_at')
 			->whereRaw($dateallfilter)
 		   	->get();
-		$task_overdue_d = table::asana_tasks()->whereIn('user_gid',$department_members_gid)
+		$task_overdue_d = table::asana_tasks()->select('completed_at')->whereIn('user_gid',$department_members_gid)
 		   	->whereRaw('(((completed_at > due_on) AND (due_on IS NOT NULL)))')
 		   	->whereNotNull('completed_at')
 			->whereRaw($dateallfilter)
 		   	->get();
 
-		   	//dd($task_completed_d);
+		//dd($task_completed_d);
 		foreach ($task_completed as $task) {
-			$completed_p[] = date($datedisplay, strtotime($task->completed_at));
+			$completed_p[] = " ". strval(date($datedisplay, strtotime($task->completed_at)));
 		}
 		foreach ($task_overdue as $task) {
-			$overdue_p[] = date($datedisplay, strtotime($task->completed_at));
+			$overdue_p[] = " ". strval(date($datedisplay, strtotime($task->completed_at)));
 		}
 		foreach ($task_completed_d as $task) {
-			$completed_d[] = date($datedisplay, strtotime($task->completed_at));
+			$completed_d[] = " ". strval(date($datedisplay, strtotime($task->completed_at)));
 		}
 		foreach ($task_overdue_d as $task) {
-			$overdue_d[] = date($datedisplay, strtotime($task->completed_at));
+			$overdue_d[] = " ". strval(date($datedisplay, strtotime($task->completed_at)));
 		}
-		//dd($task_completed);
+
+		$ctp = array();
+		$ctd = array();
+		$cop = array();
+		$cod = array();
+
 		if(isset($completed_p)){
 			asort($completed_p); 
 			$ctp = array_count_values($completed_p); 
-			$ctpdata = implode($ctp, ', ') . ',';
 		}
 		if(isset($completed_d)){
 			asort($completed_d); 
 			$ctd = array_count_values($completed_d);
-			$ctddata = implode($ctd, ', ') . ',';
-			foreach ($ctd as $value) {
-				$ctd_avg[] = ($value/$department_members);
-			}
-			$ctddata_avg = implode($ctd_avg, ', ') . ',';
 		}
 		if(isset($overdue_p)){
 			asort($overdue_p); 
 			$cop = array_count_values($overdue_p);
-			$copdata = implode($cop, ', ') . ',';
 		}
 		if(isset($overdue_d)){
 			asort($overdue_d);
 			$cod = array_count_values($overdue_d);
-			$coddata = implode($cod, ', ') . ',';
-			foreach ($cod as $value) {
-				$cod_avg[] = ($value/$department_members);
-			}
-			$coddata_avg = implode($cod_avg, ', ') . ',';
 		}
-		
+
+
+		$ctpdata = array();
+		$ctddata_avg = array();
+		$copdata = array();
+		$coddata_avg = array();
+		$ct = array_merge($ctp, $ctd, $cop, $cod);
+		ksort($ct);
+		foreach($ct as $key => $value){
+			if(isset($ctp[$key]))
+				$ctpdata[] = $ctp[$key];
+			else
+				$ctpdata[] = 0;
+
+			if(isset($ctd[$key]))
+				$ctddata_avg[] = $ctd[$key]/$department_members;
+			else
+				$ctddata_avg[] = 0;
+		}
+		$ctpdata = implode($ctpdata, ', ') . ',';
+		$ctddata_avg = implode($ctddata_avg, ', ') . ',';
+		foreach($ct as $key => $value){
+			if(isset($cop[$key]))
+				$copdata[] = $cop[$key];
+			else
+				$copdata[] = 0;
+
+			if(isset($cod[$key]))
+				$coddata_avg[] = $cod[$key]/$department_members;
+			else
+				$coddata_avg[] = 0;
+		}
+		$copdata = implode($copdata, ', ') . ',';
+		$coddata_avg = implode($coddata_avg, ', ') . ',';
+
 		$orgProfile = table::companydata()->get();
 
 		// overdue period
@@ -361,14 +388,17 @@ class PersonalReportsController extends Controller
 		if($more_15 == null) {$more_15 = 0;};	
 		$overdue_period = $days_1_2.','.$days_3_5.','.$days_6_7.','.$days_8_14.','.$more_15;
 
+		if(isset($department))
+			$department = '('.ucwords(strtolower($department)).')';
+
 		return view('personal.reports.report-asana-task', 
 			compact(
 				'orgProfile', 'gc', 'dgc', 'cg', 'csc',
-		 		'ctpdata', 'ctp', 'ctddata', 'ctd', 'ctddata_avg',
-		 		'copdata', 'cop', 'coddata', 'cod', 'coddata_avg',
+		 		'ct','ctpdata','ctddata_avg',
+		 		'co','copdata','coddata_avg',
 		 		'toodata','too',
 		 		'overdue_period',
-		 		'type'
+		 		'type', 'department'
 		 	));
 	}
 }
