@@ -389,7 +389,7 @@ class PersonalReportsController extends Controller
 		$overdue_period = $days_1_2.','.$days_3_5.','.$days_6_7.','.$days_8_14.','.$more_15;
 
 		if(isset($department))
-			$department = '('.ucwords(strtolower($department)).')';
+			$department = '(Department '.ucwords(strtolower($department)).')';
 
 		return view('personal.reports.report-asana-task', 
 			compact(

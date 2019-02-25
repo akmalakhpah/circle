@@ -125,14 +125,14 @@
             labels: [ @isset($ct) @php foreach ($ct as $key => $value) { echo '"' . $key . '"' . ', '; } @endphp @endisset],
             datasets: [
             {
-                label: 'Personal',
+                label: 'My Tasks',
                 backgroundColor:  window.chartColors.green_clear,
                 borderColor: window.chartColors.green,
                 data: [ @isset($ctpdata) {{ $ctpdata }} @endisset ],
                 fill: true,
             },
             {
-                label: 'Other Department Members Average {{$department}}',
+                label: 'Other Team Members Average {{$department}}',
                 backgroundColor:  window.chartColors.rgrey_clear,
                 borderColor: window.chartColors.grey,
                 data: [ @isset($ctddata_avg) {{ $ctddata_avg }} @endisset ],
@@ -174,14 +174,14 @@
             labels: [ @isset($ct) @php foreach ($ct as $key => $value) { echo '"' . $key . '"' . ', '; } @endphp @endisset],
             datasets: [
             {
-                label: 'Personal',
+                label: 'My Tasks',
                 backgroundColor:  window.chartColors.red_clear,
                 borderColor: window.chartColors.red,
                 data: [ @isset($copdata) {{ $copdata }} @endisset ],
                 fill: true,
             },
             {
-                label: 'Other Department Members {{$department}}',
+                label: 'Other Team Members Average {{$department}}',
                 backgroundColor:  window.chartColors.rgrey_clear,
                 borderColor: window.chartColors.grey,
                 data: [ @isset($coddata_avg) {{ $coddata_avg }} @endisset ],
