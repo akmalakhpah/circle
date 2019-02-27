@@ -18,7 +18,7 @@
             {{ csrf_field() }}
 
                 <div class="col-md-6 float-left">
-                    <div class="box box-success">
+                    <div class="box box-aqua">
                         <div class="box-header with-border">Personal Infomation</div>
                         <div class="box-body">
                             <div class="two fields">
@@ -108,7 +108,7 @@
                     </div>
                 </div>
                 <div class="col-md-6 float-left">
-                    <div class="box box-success">
+                    <div class="box box-aqua">
                         <div class="box-header with-border">Staff Details</div>
                         <div class="box-body">
                             <h4 class="ui dividing header">Designation</h4>

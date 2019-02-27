@@ -14,7 +14,7 @@
 
         <div class="row">
         <div class="col-md-12">
-                <div class="box box-success">
+                <div class="box box-aqua">
                     <div class="box-content">
                         
                         <form action="{{ url('asana-users/update/user') }}" class="ui form add-user" method="post" accept-charset="utf-8">

@@ -21,7 +21,7 @@
         </div>
 
         <div class="row">
-            <div class="box box-success">
+            <div class="box box-aqua">
                 <div class="box-body reportstable">
                     <form action="" method="get" accept-charset="utf-8" class="ui small form form-filter" id="filterform">
                         {{ csrf_field() }}

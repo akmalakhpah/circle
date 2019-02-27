@@ -15,7 +15,7 @@
 
         <div class="row">
             <div class="col-md-4">
-                <div class="box box-success">
+                <div class="box box-aqua">
                     <div class="box-body">
                     
                     <form role="form" action="{{ url('fields/department/add') }}" class="ui form" method="post" accept-charset="utf-8">
@@ -47,7 +47,7 @@
             </div>
 
             <div class="col-md-8">
-            <div class="box box-success">
+            <div class="box box-aqua">
                 <div class="box-body">
                 <table width="100%" class="table table-striped table-hover" id="dataTables-example">
                     <thead>

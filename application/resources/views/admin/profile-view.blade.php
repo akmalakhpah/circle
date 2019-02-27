@@ -17,7 +17,7 @@
 
         <div class="row">
             <div class="col-md-4 float-left">
-                <div class="box box-success">
+                <div class="box box-aqua">
                     <div class="box-body employee-info">
                             <div class="author">
                             @if($i != null)
@@ -68,7 +68,7 @@
             </div>
 
             <div class="col-md-8 float-left">
-                <div class="box box-success">
+                <div class="box box-aqua">
                     <div class="box-header with-border">Personal Infomation</div>
                     <div class="box-body employee-info">
                             <table class="tablelist">

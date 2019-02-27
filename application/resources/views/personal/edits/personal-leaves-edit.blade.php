@@ -12,7 +12,7 @@
         </div>
 
         <div class="row">
-            <div class="box box-success">
+            <div class="box box-aqua">
                 <div class="box-body">
 
                             <form action="{{ url('personal/leaves/update') }}" class="ui form" method="post" accept-charset="utf-8">

@@ -11,7 +11,7 @@
 
         <div class="row">
         <div class="col-md-12">
-            <div class="box box-success">
+            <div class="box box-aqua">
                 <div class="box-content">
                 <form action="{{ url('leaves/update') }}" class="ui form" method="post" accept-charset="utf-8">
                 {{ csrf_field() }}

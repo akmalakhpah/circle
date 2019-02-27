@@ -20,7 +20,7 @@
                 {{ csrf_field() }}
 
                     <div class="col-md-12 float-left">
-                        <div class="box box-success">
+                        <div class="box box-aqua">
                             <div class="box-header with-border">Personal Infomation</div>
                             <div class="box-body">
                                 <div class="two fields">

@@ -101,7 +101,7 @@
                 }
             @endphp
             <div class="colview col-md-6">
-                <div class="box">
+                <div class="box box-grey">
                     <div class="box-header with-border">
                         <h3 class="box-title">Completed On-time vs Overdue for {{ $display_period }}</h3>
                     </div>

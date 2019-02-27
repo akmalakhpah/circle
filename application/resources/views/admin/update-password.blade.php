@@ -15,7 +15,7 @@
 
         <div class="row">
             <div class="col-md-12">
-                <div class="box box-success">
+                <div class="box box-aqua">
                     <div class="box-content">
                        
                         <form action="{{ url('user/update-password') }}" class="ui form" method="post" accept-charset="utf-8">

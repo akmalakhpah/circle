@@ -21,7 +21,7 @@
         </div>
 
         <div class="row">
-            <div class="box box-success">
+            <div class="box box-aqua">
                 <div class="box-body">
                     <table width="100%" class="table table-striped table-hover" id="dataTables-example" data-order='[[ 7, "desc" ]]'>
                         <thead>

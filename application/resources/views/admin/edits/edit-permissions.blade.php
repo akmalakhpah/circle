@@ -15,7 +15,7 @@
 
         <div class="row">
         <div class="col-md-12">
-            <div class="box box-success">
+            <div class="box box-aqua">
                 <div class="box-content">
                 <form action="{{ url('users/roles/permissions/update') }}" class="ui form grid" method="post" accept-charset="utf-8">
                 {{ csrf_field() }}

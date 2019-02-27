@@ -15,7 +15,7 @@
         <div class="row columnview">
                 
             <div class="col-md-6 colview">
-                <div class="box box-success">
+                <div class="box box-aqua">
                     <div class="box-header with-border">
                         <h3 class="box-title">Company Population</h3>
                     </div>
@@ -28,7 +28,7 @@
             </div>
 
             <div class="colview col-md-6">
-                <div class="box box-success">
+                <div class="box box-aqua">
                     <div class="box-header with-border">
                         <h3 class="box-title">Department Population</h3>
                     </div>
@@ -41,7 +41,7 @@
             </div>
 
             <div class="colview col-md-6">
-                <div class="box box-success">
+                <div class="box box-aqua">
                     <div class="box-header with-border">
                         <h3 class="box-title">Gender Demographics</h3>
                     </div>
@@ -54,7 +54,7 @@
             </div>
 
             <div class="colview col-md-6">
-                <div class="box box-success">
+                <div class="box box-aqua">
                     <div class="box-header with-border">
                         <h3 class="box-title">Age Demographics</h3>
                     </div>
@@ -67,7 +67,7 @@
             </div>
 
             <div class="colview col-md-6">
-                <div class="box box-success">
+                <div class="box box-aqua">
                     <div class="box-header with-border">
                         <h3 class="box-title">Civil Status Demographics</h3>
                     </div>
@@ -80,7 +80,7 @@
             </div>
 
             <div class="colview col-md-6">
-                <div class="box box-success">
+                <div class="box box-aqua">
                     <div class="box-header with-border">
                         <h3 class="box-title">Staff Hired by Year</h3>
                     </div>
