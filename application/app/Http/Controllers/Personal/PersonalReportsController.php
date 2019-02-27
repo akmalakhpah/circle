@@ -369,7 +369,7 @@ class PersonalReportsController extends Controller
 
 			if(isset($cod[$key])){
 				$coddata[] = $cod[$key]/$department_members;
-				$coddata_avg = $coddata_avg + ($ctd[$key]/$department_members);
+				$coddata_avg = $coddata_avg + ($cod[$key]/$department_members);
 			}
 			else{
 				$coddata[] = 0;
