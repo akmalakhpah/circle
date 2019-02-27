@@ -20,6 +20,7 @@
                     <div class="inline three fields">
                         <div class="three wide field">
                             <select name="type" class="ui search dropdown action getid">
+                                <option value="day" @if($type=='day') selected @endif>Day</option>
                                 <option value="week" @if($type=='week') selected @endif>Work Week</option>
                                 <option value="month" @if($type=='month') selected @endif>Month</option>
                                 <option value="year" @if($type=='year') selected @endif>Year</option>
@@ -31,8 +32,19 @@
                 </form>
             </div>
 
+            @php
+                if($type == 'day'){
+                    $display_period = 'Daily';
+                } elseif($type == 'week'){
+                    $display_period = 'Weekly';
+                } elseif($type == 'month'){
+                    $display_period = 'Monthly';
+                } else {
+                    $display_period = 'Yearly';
+                }
+            @endphp
             <div class="colview col-md-6">
-                <div class="box box-success">
+                <div class="box box-green">
                     <div class="box-header with-border">
                         <h3 class="box-title">Completed Tasks by {{ ucwords($type) }}</h3>
                     </div>
@@ -40,12 +52,24 @@
                         <div class="canvas-wrapper">
                             <canvas class="chart" id="completedtasks"></canvas>
                         </div>
+                        <div class="row">  
+                            <div class="col-md-6 align-center">
+                                <small>
+                                    Personal Average : <strong class="text-green">{{ round($ctpdata_avg,1) }}</strong> tasks per {{$type}}
+                                </small>
+                            </div> 
+                            <div class="col-md-6 align-center">
+                                <small>
+                                    Department Average : <strong class="text-green">{{ round($ctddata_avg,1) }}</strong> tasks per {{$type}}
+                                </small>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
 
             <div class="colview col-md-6">
-                <div class="box box-success">
+                <div class="box box-red">
                     <div class="box-header with-border">
                         <h3 class="box-title">Overdue Tasks by {{ ucwords($type) }}</h3>
                     </div>
@@ -53,14 +77,33 @@
                         <div class="canvas-wrapper">
                             <canvas class="chart" id="overduetasks"></canvas>
                         </div>
+                        <div class="row">  
+                            <div class="col-md-6 align-center">
+                                <small>
+                                    Personal Average : <strong class="text-red">{{ round($copdata_avg,1) }}</strong> tasks per {{$type}}
+                                </small>
+                            </div> 
+                            <div class="col-md-6 align-center">
+                                <small>
+                                    Department Average : <strong class="text-red">{{ round($coddata_avg,1) }}</strong> tasks per {{$type}}
+                                </small>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
 
+            @php
+                if($type == 'day'){
+                    $display_period = 'Yesterday';
+                } else {
+                    $display_period = 'This '.ucwords($type);
+                }
+            @endphp
             <div class="colview col-md-6">
-                <div class="box box-success">
+                <div class="box">
                     <div class="box-header with-border">
-                        <h3 class="box-title">Completed On-time vs Overdue for This {{ ucwords($type) }}</h3>
+                        <h3 class="box-title">Completed On-time vs Overdue for {{ $display_period }}</h3>
                     </div>
                     <div class="box-body">
                         <div class="canvas-wrapper">
@@ -71,9 +114,9 @@
             </div>
 
             <div class="colview col-md-6">
-                <div class="box box-success">
+                <div class="box box-red">
                     <div class="box-header with-border">
-                        <h3 class="box-title">Overdue Period Demographics for This {{ ucwords($type) }}</h3>
+                        <h3 class="box-title">Overdue Period Demographics for {{ $display_period }}</h3>
                     </div>
                     <div class="box-body">
                         <div class="canvas-wrapper">
@@ -135,7 +178,7 @@
                 label: 'Other Team Members Average {{$department}}',
                 backgroundColor:  window.chartColors.rgrey_clear,
                 borderColor: window.chartColors.grey,
-                data: [ @isset($ctddata_avg) {{ $ctddata_avg }} @endisset ],
+                data: [ @isset($ctddata) {{ $ctddata }} @endisset ],
                 fill: true,
             }]
         },
@@ -184,7 +227,7 @@
                 label: 'Other Team Members Average {{$department}}',
                 backgroundColor:  window.chartColors.rgrey_clear,
                 borderColor: window.chartColors.grey,
-                data: [ @isset($coddata_avg) {{ $coddata_avg }} @endisset ],
+                data: [ @isset($coddata) {{ $coddata }} @endisset ],
                 fill: true,
             }
             ]

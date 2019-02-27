@@ -222,11 +222,16 @@ class PersonalReportsController extends Controller
 
 
         switch($type){
+            case 'day':
+            	$datefilter = "(YEAR(subdate(current_date, 1)) = YEAR(completed_at) AND MONTH(subdate(current_date, 1)) = MONTH(completed_at) AND DAY(subdate(current_date, 1)) = DAY(completed_at))";
+            	$dateallfilter = "(completed_at > DATE_SUB(DATE_SUB(curdate(), INTERVAL day(curdate())-1 DAY), INTERVAL 1 MONTH))";
+            	$datedisplay = "Y-m-d";
+                break;
+
             case 'week':
             	$datefilter = "(YEAR(curdate()) = YEAR(completed_at) AND WEEK(curdate()) = WEEK(completed_at))";
             	$dateallfilter = "(completed_at > DATE_SUB(DATE_SUB(curdate(), INTERVAL day(curdate())-1 DAY), INTERVAL 2 MONTH))";
             	$datedisplay = "Y-W";
-
                 break;
 
             case 'month':
@@ -325,37 +330,58 @@ class PersonalReportsController extends Controller
 
 
 		$ctpdata = array();
-		$ctddata_avg = array();
+		$ctddata = array();
 		$copdata = array();
-		$coddata_avg = array();
+		$coddata = array();
+		$ctpdata_avg = 0;
+		$ctddata_avg = 0;
+		$copdata_avg = 0;
+		$coddata_avg = 0;
 		$ct = array_merge($ctp, $ctd, $cop, $cod);
 		ksort($ct);
 		foreach($ct as $key => $value){
-			if(isset($ctp[$key]))
+			if(isset($ctp[$key])){
 				$ctpdata[] = $ctp[$key];
-			else
+				$ctpdata_avg = $ctpdata_avg + $ctp[$key];
+			}
+			else{
 				$ctpdata[] = 0;
+			}
 
-			if(isset($ctd[$key]))
-				$ctddata_avg[] = $ctd[$key]/$department_members;
-			else
-				$ctddata_avg[] = 0;
+			if(isset($ctd[$key])){
+				$ctddata[] = $ctd[$key]/$department_members;
+				$ctddata_avg = $ctddata_avg + ($ctd[$key]/$department_members);
+			}
+			else{
+				$ctddata[] = 0;
+			}
 		}
 		$ctpdata = implode($ctpdata, ', ') . ',';
-		$ctddata_avg = implode($ctddata_avg, ', ') . ',';
+		$ctddata = implode($ctddata, ', ') . ',';
 		foreach($ct as $key => $value){
-			if(isset($cop[$key]))
+			if(isset($cop[$key])){
 				$copdata[] = $cop[$key];
-			else
+				$copdata_avg = $copdata_avg + $cop[$key];
+			}
+			else{
 				$copdata[] = 0;
+			}
 
-			if(isset($cod[$key]))
-				$coddata_avg[] = $cod[$key]/$department_members;
-			else
-				$coddata_avg[] = 0;
+			if(isset($cod[$key])){
+				$coddata[] = $cod[$key]/$department_members;
+				$coddata_avg = $coddata_avg + ($ctd[$key]/$department_members);
+			}
+			else{
+				$coddata[] = 0;
+			}
 		}
 		$copdata = implode($copdata, ', ') . ',';
-		$coddata_avg = implode($coddata_avg, ', ') . ',';
+		$coddata = implode($coddata, ', ') . ',';
+
+		$ctpdata_avg = $ctpdata_avg / count($ct);
+		$ctddata_avg = $ctddata_avg / count($ct);
+		$copdata_avg = $copdata_avg / count($ct);
+		$coddata_avg = $coddata_avg / count($ct);
 
 		$orgProfile = table::companydata()->get();
 
@@ -394,8 +420,8 @@ class PersonalReportsController extends Controller
 		return view('personal.reports.report-asana-task', 
 			compact(
 				'orgProfile', 'gc', 'dgc', 'cg', 'csc',
-		 		'ct','ctpdata','ctddata_avg',
-		 		'co','copdata','coddata_avg',
+		 		'ct','ctpdata','ctddata','ctpdata_avg','ctddata_avg',
+		 		'co','copdata','coddata','copdata_avg','coddata_avg',
 		 		'toodata','too',
 		 		'overdue_period',
 		 		'type', 'department'
