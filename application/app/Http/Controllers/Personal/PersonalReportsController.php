@@ -90,7 +90,7 @@ class PersonalReportsController extends Controller
 		foreach ($ed as $c) { $comp[] = $c->company; $dcc = array_count_values($comp); }
 		$cc = implode($dcc, ', ') . ',';
 
-		// chart department
+		// chart parent
 		foreach ($ed as $d) { $dept[] = $d->department; $dpc = array_count_values($dept); }
 		$dc = implode($dpc, ', ') . ',';
 
@@ -195,26 +195,59 @@ class PersonalReportsController extends Controller
 		} 
 	}
 
-	public function asanaTask(Request $request) {
+	public function asanaTask(string $profile = "my", Request $request) {
 		$id = \Auth::user()->reference;
+		$parent_members_gid = array();
+		$user_gid = array();
 
-		$user_gid = table::asana_users()->where('reference', $id)->first();
-		if(isset($user_gid))
-			$user_gid = $user_gid->gid;
+		if($profile == "my"){
+			$u_gid = table::asana_users()->where('reference', $id)->first();
+			if(isset($u_gid))
+				$user_gid[] = $u_gid->gid;
+		} else {
+	        $department = table::companydata()->where('reference',$id)->first();
+	        if(isset($department))
+	        	$department = $department->department;
 
-        $department = table::companydata()->where('reference',$id)->first();
-        if(isset($department))
-        	$department = $department->department;
+	        $department_members = table::companydata()->select('gid')->leftjoin('tbl_people','tbl_company_data.reference','=','tbl_people.id')->leftjoin('tbl_asana_users','tbl_asana_users.reference','=','tbl_people.id')->where('department',$department)->where('tbl_people.employmentstatus', 'Active')->get()->toArray();
+	        foreach ($department_members as $value) {
+	        	if(isset($value->gid)){
+	        		//if($value->gid != $user_gid)
+	        			$user_gid[] = $value->gid;
+	        	}
+	        }
 
-        $department_members = table::companydata()->select('gid')->leftjoin('tbl_people','tbl_company_data.reference','=','tbl_people.id')->leftjoin('tbl_asana_users','tbl_asana_users.reference','=','tbl_people.id')->where('department',$department)->where('tbl_people.employmentstatus', 'Active')->get()->toArray();
-        $department_members_gid = array();
-        foreach ($department_members as $value) {
-        	if(isset($value->gid)){
-        		if($value->gid != $user_gid)
-        			$department_members_gid[] = $value->gid;
-        	}
-        }
-        $department_members = count($department_members);
+		}
+
+		if($profile == "my"){
+	        $parent = table::companydata()->where('reference',$id)->first();
+	        if(isset($parent))
+	        	$parent = $parent->department;
+
+	        $parent_members = table::companydata()->select('gid')->leftjoin('tbl_people','tbl_company_data.reference','=','tbl_people.id')->leftjoin('tbl_asana_users','tbl_asana_users.reference','=','tbl_people.id')->where('department',$parent)->where('tbl_people.employmentstatus', 'Active')->get()->toArray();
+	        foreach ($parent_members as $value) {
+	        	if(isset($value->gid)){
+	        		//if($value->gid != $user_gid)
+	        			$parent_members_gid[] = $value->gid;
+	        	}
+	        }
+
+        	$parent_members = count($parent_members);
+	    } else {
+	        $parent = table::companydata()->where('reference',$id)->first();
+	        if(isset($parent))
+	        	$parent = $parent->company;
+
+	        $parent_members = table::companydata()->select('gid')->leftjoin('tbl_people','tbl_company_data.reference','=','tbl_people.id')->leftjoin('tbl_asana_users','tbl_asana_users.reference','=','tbl_people.id')->where('company',$parent)->where('tbl_people.employmentstatus', 'Active')->get()->toArray();
+	        foreach ($parent_members as $value) {
+	        	if(isset($value->gid)){
+	        		//if($value->gid != $user_gid)
+	        			$parent_members_gid[] = $value->gid;
+	        	}
+	        }
+
+        	$parent_members = table::companydata()->select('department')->leftjoin('tbl_people','tbl_company_data.reference','=','tbl_people.id')->leftjoin('tbl_asana_users','tbl_asana_users.reference','=','tbl_people.id')->where('company',$parent)->where('tbl_people.employmentstatus', 'Active')->groupBy('department')->count();
+	    }
 
 		$type = 'week';
 		if(isset($request->type))
@@ -259,7 +292,7 @@ class PersonalReportsController extends Controller
 		//task_ontime_overdue
 		$task_ontime_overdue = table::asana_tasks()
 			->select(DB::raw("IF((completed_at < due_on OR due_on IS NULL), 'On-time', 'Overdue' ) as status"))
-			->where('user_gid',$user_gid)
+			->whereIn('user_gid',$user_gid)
 			->whereRaw($datefilter)
 			->orderBy('status')
 			->get();
@@ -271,28 +304,27 @@ class PersonalReportsController extends Controller
 			$too = '';
 
 		// completed task
-		$task_completed = table::asana_tasks()->select('completed_at')->where('user_gid',$user_gid)
+		$task_completed = table::asana_tasks()->select('completed_at')->whereIn('user_gid',$user_gid)
 		   	->whereRaw('((completed_at < due_on) OR (due_on IS NULL))')
 		   	->whereNotNull('completed_at')
 			->whereRaw($dateallfilter)
 		   	->get();
-		$task_completed_d = table::asana_tasks()->select('completed_at')->whereIn('user_gid',$department_members_gid)
+		$task_completed_d = table::asana_tasks()->select('completed_at')->whereIn('user_gid',$parent_members_gid)
 		   	->whereRaw('((completed_at < due_on) OR (due_on IS NULL))')
 		   	->whereNotNull('completed_at')
 			->whereRaw($dateallfilter)
 		   	->get();
-		$task_overdue = table::asana_tasks()->select('completed_at')->where('user_gid',$user_gid)
+		$task_overdue = table::asana_tasks()->select('completed_at')->whereIn('user_gid',$user_gid)
 		   	->whereRaw('(((completed_at > due_on) AND (due_on IS NOT NULL)))')
 		   	->whereNotNull('completed_at')
 			->whereRaw($dateallfilter)
 		   	->get();
-		$task_overdue_d = table::asana_tasks()->select('completed_at')->whereIn('user_gid',$department_members_gid)
+		$task_overdue_d = table::asana_tasks()->select('completed_at')->whereIn('user_gid',$parent_members_gid)
 		   	->whereRaw('(((completed_at > due_on) AND (due_on IS NOT NULL)))')
 		   	->whereNotNull('completed_at')
 			->whereRaw($dateallfilter)
 		   	->get();
 
-		//dd($task_completed_d);
 		foreach ($task_completed as $task) {
 			$completed_p[] = " ". strval(date($datedisplay, strtotime($task->completed_at)));
 		}
@@ -349,8 +381,8 @@ class PersonalReportsController extends Controller
 			}
 
 			if(isset($ctd[$key])){
-				$ctddata[] = $ctd[$key]/$department_members;
-				$ctddata_avg = $ctddata_avg + ($ctd[$key]/$department_members);
+				$ctddata[] = $ctd[$key]/$parent_members;
+				$ctddata_avg = $ctddata_avg + ($ctd[$key]/$parent_members);
 			}
 			else{
 				$ctddata[] = 0;
@@ -368,8 +400,8 @@ class PersonalReportsController extends Controller
 			}
 
 			if(isset($cod[$key])){
-				$coddata[] = $cod[$key]/$department_members;
-				$coddata_avg = $coddata_avg + ($cod[$key]/$department_members);
+				$coddata[] = $cod[$key]/$parent_members;
+				$coddata_avg = $coddata_avg + ($cod[$key]/$parent_members);
 			}
 			else{
 				$coddata[] = 0;
@@ -386,23 +418,23 @@ class PersonalReportsController extends Controller
 		$orgProfile = table::companydata()->get();
 
 		// overdue period
-		$days_1_2  = table::asana_tasks()->where('user_gid',$user_gid)
+		$days_1_2  = table::asana_tasks()->whereIn('user_gid',$user_gid)
 						->whereRaw($datefilter)
 						->whereRaw('(DATEDIFF(completed_at,due_on) >= 1 AND DATEDIFF(completed_at,due_on) <= 2)')
 						->count();
-		$days_3_5  = table::asana_tasks()->where('user_gid',$user_gid)
+		$days_3_5  = table::asana_tasks()->whereIn('user_gid',$user_gid)
 						->whereRaw($datefilter)
 						->whereRaw('(DATEDIFF(completed_at,due_on) >= 3 AND DATEDIFF(completed_at,due_on) <= 5)')
 						->count();
-		$days_6_7  = table::asana_tasks()->where('user_gid',$user_gid)
+		$days_6_7  = table::asana_tasks()->whereIn('user_gid',$user_gid)
 						->whereRaw($datefilter)
 						->whereRaw('(DATEDIFF(completed_at,due_on) >= 6 AND DATEDIFF(completed_at,due_on) <= 7)')
 						->count();
-		$days_8_14 = table::asana_tasks()->where('user_gid',$user_gid)
+		$days_8_14 = table::asana_tasks()->whereIn('user_gid',$user_gid)
 						->whereRaw($datefilter)
 						->whereRaw('(DATEDIFF(completed_at,due_on) >= 8 AND DATEDIFF(completed_at,due_on) <= 14)')
 						->count();
-		$more_15   = table::asana_tasks()->where('user_gid',$user_gid)
+		$more_15   = table::asana_tasks()->whereIn('user_gid',$user_gid)
 						->whereRaw($datefilter)
 						->whereRaw('DATEDIFF(completed_at,due_on) >= 13')
 						->count();
@@ -414,8 +446,18 @@ class PersonalReportsController extends Controller
 		if($more_15 == null) {$more_15 = 0;};	
 		$overdue_period = $days_1_2.','.$days_3_5.','.$days_6_7.','.$days_8_14.','.$more_15;
 
-		if(isset($department))
-			$department = '(Department '.ucwords(strtolower($department)).')';
+        if($profile=='department'){
+            $personal_name = "My Department";
+            $parent_name = "Company";
+            if(isset($parent))
+				$parent = 'Other department in my company ('.ucwords(strtolower($parent)).')';
+        }
+        else{ 
+        	$personal_name = "My";
+            $parent_name = "Department";
+            if(isset($parent))
+				$parent = 'Other staff in my department ('.ucwords(strtolower($parent)).')';
+        }
 
 		return view('personal.reports.report-asana-task', 
 			compact(
@@ -424,7 +466,7 @@ class PersonalReportsController extends Controller
 		 		'co','copdata','coddata','copdata_avg','coddata_avg',
 		 		'toodata','too',
 		 		'overdue_period',
-		 		'type', 'department'
+		 		'type', 'parent', 'profile', 'personal_name', 'parent_name'
 		 	));
 	}
 }

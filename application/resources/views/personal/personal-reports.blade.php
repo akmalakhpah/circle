@@ -34,7 +34,10 @@
                                         
                         @if($setting->enable_asana_report)
                         <tr>
-                            <td><a href="{{ url('personal/reports/asana-task') }}"><i class="ui icon font"></i> Asana Tasks Report</a></td>
+                            <td><a href="{{ url('personal/reports/asana-task/my') }}"><i class="ui icon font"></i> My Asana Tasks Report</a></td>
+                        </tr>
+                        <tr>
+                            <td><a href="{{ url('personal/reports/asana-task/department') }}"><i class="ui icon font"></i> My Department Asana Tasks Report</a></td>
                         </tr>
                         @endif
                         <tr>

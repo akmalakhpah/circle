@@ -5,7 +5,7 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-12">
-                <h2 class="page-title">Asana Task Reports
+                <h2 class="page-title">{{$personal_name}} Asana Task Reports
                     <button class="ui basic button mini offsettop5 float-right d-none d-sm-block" id="toggleview"><i class="ui icon columns"></i>View</button> 
                     <a href="{{ url('personal/reports') }}" class="ui blue basic button mini offsettop5 float-right"><i class="ui icon chevron left"></i>Return</a>
                 </h2>
@@ -15,7 +15,7 @@
         <div class="row columnview">
 
             <div class="colview col-md-12">
-               <form action="{{ url('personal/reports/asana-task') }}" method="post" accept-charset="utf-8" class="ui small form form-filter" id="filterform">
+               <form action="{{ url('personal/reports/asana-task/'.$profile) }}" method="post" accept-charset="utf-8" class="ui small form form-filter" id="filterform">
                     {{ csrf_field() }}
                     <div class="inline three fields">
                         <div class="three wide field">
@@ -55,12 +55,12 @@
                         <div class="row">  
                             <div class="col-md-6 align-center">
                                 <small>
-                                    Personal Average : <strong class="text-green">{{ round($ctpdata_avg,1) }}</strong> tasks per {{$type}}
+                                    {{$personal_name}} Average : <strong class="text-green">{{ round($ctpdata_avg,1) }}</strong> tasks per {{$type}}
                                 </small>
                             </div> 
                             <div class="col-md-6 align-center">
                                 <small>
-                                    Department Average : <strong class="text-green">{{ round($ctddata_avg,1) }}</strong> tasks per {{$type}}
+                                    {{$parent_name}} Average : <strong class="text-green">{{ round($ctddata_avg,1) }}</strong> tasks per {{$type}}
                                 </small>
                             </div>
                         </div>
@@ -80,12 +80,12 @@
                         <div class="row">  
                             <div class="col-md-6 align-center">
                                 <small>
-                                    Personal Average : <strong class="text-red">{{ round($copdata_avg,1) }}</strong> tasks per {{$type}}
+                                    {{$personal_name}} Average : <strong class="text-red">{{ round($copdata_avg,1) }}</strong> tasks per {{$type}}
                                 </small>
                             </div> 
                             <div class="col-md-6 align-center">
                                 <small>
-                                    Department Average : <strong class="text-red">{{ round($coddata_avg,1) }}</strong> tasks per {{$type}}
+                                    {{$parent_name}} Average : <strong class="text-red">{{ round($coddata_avg,1) }}</strong> tasks per {{$type}}
                                 </small>
                             </div>
                         </div>
@@ -168,14 +168,14 @@
             labels: [ @isset($ct) @php foreach ($ct as $key => $value) { echo '"' . $key . '"' . ', '; } @endphp @endisset],
             datasets: [
             {
-                label: 'My Tasks',
+                label: '{{$personal_name}} tasks',
                 backgroundColor:  window.chartColors.green_clear,
                 borderColor: window.chartColors.green,
                 data: [ @isset($ctpdata) {{ $ctpdata }} @endisset ],
                 fill: true,
             },
             {
-                label: 'Other Team Members Average {{$department}}',
+                label: '{{$parent}}',
                 backgroundColor:  window.chartColors.rgrey_clear,
                 borderColor: window.chartColors.grey,
                 data: [ @isset($ctddata) {{ $ctddata }} @endisset ],
@@ -217,14 +217,14 @@
             labels: [ @isset($ct) @php foreach ($ct as $key => $value) { echo '"' . $key . '"' . ', '; } @endphp @endisset],
             datasets: [
             {
-                label: 'My Tasks',
+                label: '{{$personal_name}} tasks',
                 backgroundColor:  window.chartColors.red_clear,
                 borderColor: window.chartColors.red,
                 data: [ @isset($copdata) {{ $copdata }} @endisset ],
                 fill: true,
             },
             {
-                label: 'Other Team Members Average {{$department}}',
+                label: '{{$parent}}',
                 backgroundColor:  window.chartColors.rgrey_clear,
                 borderColor: window.chartColors.grey,
                 data: [ @isset($coddata) {{ $coddata }} @endisset ],

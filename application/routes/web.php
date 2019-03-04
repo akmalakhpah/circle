@@ -280,8 +280,8 @@ Route::group(['middleware' => 'auth'], function () {
 			Route::get('personal/reports/organization-profile', 'personal\PersonalReportsController@orgProfile');
 			Route::get('personal/reports/employee-birthdays', 'personal\PersonalReportsController@empBday');
 			Route::get('personal/reports/user-accounts', 'personal\PersonalReportsController@userAccs');
-			Route::get('personal/reports/asana-task', 'personal\PersonalReportsController@asanaTask');
-			Route::post('personal/reports/asana-task', 'personal\PersonalReportsController@asanaTask');
+			Route::get('personal/reports/asana-task/{profile}', 'personal\PersonalReportsController@asanaTask');
+			Route::post('personal/reports/asana-task/{profile}', 'personal\PersonalReportsController@asanaTask');
 
 			// user 
 			Route::get('personal/update-user', 'personal\PersonalAccountController@viewUser');
