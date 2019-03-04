@@ -224,7 +224,7 @@ class PersonalReportsController extends Controller
 	        if(isset($parent))
 	        	$parent = $parent->department;
 
-	        $parent_members = table::companydata()->select('gid')->leftjoin('tbl_people','tbl_company_data.reference','=','tbl_people.id')->leftjoin('tbl_asana_users','tbl_asana_users.reference','=','tbl_people.id')->where('department',$parent)->where('tbl_people.employmentstatus', 'Active')->get()->toArray();
+	        $parent_members = table::companydata()->select('gid')->leftjoin('tbl_people','tbl_company_data.reference','=','tbl_people.id')->leftjoin('tbl_asana_users','tbl_asana_users.reference','=','tbl_people.id')->where('department',$parent)->where('tbl_people.employmentstatus', 'Active')->whereNotIn('gid',$user_gid)->get()->toArray();
 	        foreach ($parent_members as $value) {
 	        	if(isset($value->gid)){
 	        		//if($value->gid != $user_gid)
@@ -238,7 +238,7 @@ class PersonalReportsController extends Controller
 	        if(isset($parent))
 	        	$parent = $parent->company;
 
-	        $parent_members = table::companydata()->select('gid')->leftjoin('tbl_people','tbl_company_data.reference','=','tbl_people.id')->leftjoin('tbl_asana_users','tbl_asana_users.reference','=','tbl_people.id')->where('company',$parent)->where('tbl_people.employmentstatus', 'Active')->get()->toArray();
+	        $parent_members = table::companydata()->select('gid')->leftjoin('tbl_people','tbl_company_data.reference','=','tbl_people.id')->leftjoin('tbl_asana_users','tbl_asana_users.reference','=','tbl_people.id')->where('company',$parent)->where('tbl_people.employmentstatus', 'Active')->whereNotIn('gid',$user_gid)->get()->toArray();
 	        foreach ($parent_members as $value) {
 	        	if(isset($value->gid)){
 	        		//if($value->gid != $user_gid)
@@ -246,7 +246,7 @@ class PersonalReportsController extends Controller
 	        	}
 	        }
 
-        	$parent_members = table::companydata()->select('department')->leftjoin('tbl_people','tbl_company_data.reference','=','tbl_people.id')->leftjoin('tbl_asana_users','tbl_asana_users.reference','=','tbl_people.id')->where('company',$parent)->where('tbl_people.employmentstatus', 'Active')->groupBy('department')->count();
+        	$parent_members = table::companydata()->select('department')->leftjoin('tbl_people','tbl_company_data.reference','=','tbl_people.id')->leftjoin('tbl_asana_users','tbl_asana_users.reference','=','tbl_people.id')->where('company',$parent)->where('tbl_people.employmentstatus', 'Active')->whereNotIn('gid',$user_gid)->groupBy('department')->count();
 	    }
 
 		$type = 'week';
@@ -448,13 +448,13 @@ class PersonalReportsController extends Controller
 
         if($profile=='department'){
             $personal_name = "My Department";
-            $parent_name = "Company";
+            $parent_name = "Other Department";
             if(isset($parent))
 				$parent = 'Other department in my company ('.ucwords(strtolower($parent)).')';
         }
         else{ 
         	$personal_name = "My";
-            $parent_name = "Department";
+            $parent_name = "My Teammate";
             if(isset($parent))
 				$parent = 'Other staff in my department ('.ucwords(strtolower($parent)).')';
         }
