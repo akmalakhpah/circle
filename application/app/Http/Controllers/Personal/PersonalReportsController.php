@@ -448,13 +448,13 @@ class PersonalReportsController extends Controller
 
         if($profile=='department'){
             $personal_name = "My Department";
-            $parent_name = "Other Department";
+            $parent_name = "Other Departments";
             if(isset($parent))
-				$parent = 'Other department in my company ('.ucwords(strtolower($parent)).')';
+				$parent = 'Other departments in my company ('.ucwords(strtolower($parent)).')';
         }
         else{ 
         	$personal_name = "My";
-            $parent_name = "My Teammate";
+            $parent_name = "My Teammates";
             if(isset($parent))
 				$parent = 'Other staff in my department ('.ucwords(strtolower($parent)).')';
         }

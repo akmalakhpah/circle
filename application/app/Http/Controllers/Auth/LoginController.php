@@ -126,13 +126,19 @@ class LoginController extends Controller
             if($existingEmployee){
                 $fullname = mb_strtoupper($existingEmployee->lastname.', '.$existingEmployee->firstname.' '.$existingEmployee->mi);
 
+                $manager = table::department()->where("manager",$existingEmployee->id)->count(); 
+                if($manager > 0)
+                    $role_id = 2;
+                else 
+                    $role_id = 5;
+
                 table::users()->insert([
                     [
                         'reference' => $existingEmployee->id,
                         'idno' => $existingEmployee->idno,
                         'name' => $fullname,
                         'email' => $user->email,
-                        'role_id' => 5,
+                        'role_id' => $role_id,
                         'acc_type' => 1,
                         'status' => 1,
                     ],

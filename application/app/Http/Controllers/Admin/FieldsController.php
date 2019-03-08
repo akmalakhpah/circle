@@ -77,7 +77,7 @@ class FieldsController extends Controller
         
       }
 
-      $data = table::department()->get();
+      $data = table::department()->select('tbl_form_department.*','tbl_form_company.company','tbl_people.firstname')->leftjoin('tbl_form_company', 'tbl_form_department.comp_code', '=', 'tbl_form_company.id')->leftjoin('tbl_people', 'tbl_form_department.manager', '=', 'tbl_people.id')->get();
       $c = table::company()->get();
       return view('admin.fields.department', compact('data','c'));
     }
@@ -104,6 +104,47 @@ class FieldsController extends Controller
       ]);
 
       return redirect('fields/department')->with('success','New Department has been saved.');
+    }
+
+    public function editDepartment($id) {
+      if (permission::permitted('formdata-departments')=='fail'){
+        return view('errors.permission-denied');
+      }
+
+      $comp = table::company()->get();
+      $dept = table::department()->where("id", $id)->first();
+      $employees = table::people()->select('tbl_people.*')->leftjoin('tbl_company_data', 'tbl_company_data.reference', '=', 'tbl_people.id')->where('tbl_company_data.department',$dept->department)->orderBy('tbl_people.firstname')->get();
+      
+      return view('admin.edits.edit-department', compact('dept', 'comp', 'employees'));
+    }
+
+
+    public function updateDepartment(Request $request) {
+      if (permission::permitted('formdata-departments')=='fail'){
+        return view('errors.permission-denied');
+      }
+
+      $department = strtoupper($request->department); 
+      $comp_code = strtoupper($request->comp_code);
+      $manager = $request->manager;
+      $id = $request->id;
+
+      if($request->department == null || $request->comp_code == null || $request->manager == null || $id == null) {
+        return redirect('fields/department/edit/'.$id)->with('error', 'Whoops! Please fill the form completely!');
+      }
+
+      table::department()->where('id', $id)->update([
+          "department" => $department,
+          "comp_code" => $comp_code,
+          "manager" => $manager
+      ]);
+
+      //give manager access to employee
+      table::users()->where('reference', $manager)->update([
+          "role_id" => 2
+      ]);
+
+      return redirect('fields/department')->with('success', 'Department has been update!');
     }
 
     public function deleteDepartment($id)

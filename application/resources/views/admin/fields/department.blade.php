@@ -54,6 +54,7 @@
                         <tr>
                             <th>Department</th>
                             <th>Company</th>
+                            <th>Manager</th>
                             <th></th>
                         </tr>
                     </thead>
@@ -62,16 +63,11 @@
                         @foreach ($data as $department)
                         <tr>
                             <td>{{ $department->department }}</td>
-                            <td>
-                                @isset($c)
-                                    @foreach($c as $comp)
-                                        @if($department->comp_code == $comp->id) 
-                                            {{ $comp->company }} 
-                                        @endif
-                                    @endforeach
-                                @endisset
-                            </td>
-                            <td class="align-right"><a href="{{ url('fields/department/delete/'.$department->id) }}" class="ui circular basic icon button tiny"><i class="icon trash alternate outline"></i></a></td>
+                            <td>{{ $department->company }}</td>
+                            <td>{{ $department->firstname }}</td>
+                            <td class="align-right">
+                                <a href="{{ url('fields/department/edit/'.$department->id) }}" class="ui circular basic icon button tiny"><i class="icon edit outline"></i></a>
+                                <a href="{{ url('fields/department/delete/'.$department->id) }}" class="ui circular basic icon button tiny"><i class="icon trash alternate outline"></i></a></td>
                         </tr>
                         @endforeach
                         @endisset

@@ -190,6 +190,8 @@ Route::group(['middleware' => 'auth'], function () {
 			Route::get('fields/department', 'admin\FieldsController@department');
 			Route::post('fields/department/add', 'admin\FieldsController@addDepartment');
 			Route::get('fields/department/delete/{id}', 'admin\FieldsController@deleteDepartment');
+			Route::get('fields/department/edit/{id}',  'admin\FieldsController@editDepartment');
+			Route::post('fields/department/update',  'admin\FieldsController@updateDepartment');
 
 			// Job Title
 			Route::get('fields/jobtitle', 'admin\FieldsController@jobtitle');
