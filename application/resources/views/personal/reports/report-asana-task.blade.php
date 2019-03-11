@@ -18,6 +18,17 @@
                <form action="{{ url('personal/reports/asana-task/'.$profile) }}" method="post" accept-charset="utf-8" class="ui small form form-filter" id="filterform">
                     {{ csrf_field() }}
                     <div class="inline three fields">
+
+                        @isset($others)
+                        <div class="four wide field">
+                            <select class="ui search dropdown getemail uppercase" name="other">
+                                @foreach ($others as $value => $name)
+                                    <option value="{{ $value }}" @if($mine == $value) selected @endif>{{ $name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        @endisset
+
                         <div class="three wide field">
                             <select name="type" class="ui search dropdown action getid">
                                 <option value="day" @if($type=='day') selected @endif>Day</option>

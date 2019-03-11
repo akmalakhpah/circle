@@ -199,15 +199,48 @@ class PersonalReportsController extends Controller
 		$id = \Auth::user()->reference;
 		$parent_members_gid = array();
 		$user_gid = array();
+		$others = null;
+ 		$mine = $id;
+ 		$other = null;
+
+ 		if(isset($request->other)) {
+			$other = $request->other;
+ 		}
+
+ 		if(\Auth::user()->role_id == 2){
+ 			$others = array();
+ 		} else {
+ 			$other = null;
+ 		}
 
 		if($profile == "my"){
-			$u_gid = table::asana_users()->where('reference', $id)->first();
+
+			if(isset($other)){ // get other user u_id
+				$mine = $other;
+				$u_gid = table::asana_users()->where('reference', $other)->first();
+			} else { // get own user u_id
+				$mine = $id;
+				$u_gid = table::asana_users()->where('reference', $id)->first();
+			}
 			if(isset($u_gid))
 				$user_gid[] = $u_gid->gid;
 		} else {
-	        $department = table::companydata()->where('reference',$id)->first();
-	        if(isset($department))
-	        	$department = $department->department;
+
+			if(isset($other)){ // get other department id
+				$dept = table::department()->where("id", $other)->first();
+				if(isset($dept))
+					$department = $dept->department;
+				$mine = $other;
+			} else { // get own department id
+		        $department = table::companydata()->where('reference',$id)->first();
+		        if(isset($department))
+		        {
+		        	$department = $department->department;
+		        	$dept = table::department()->where("department", $department)->first();
+		        	if(isset($dept))
+		        		$mine = $dept->id;
+		        }
+			}
 
 	        $department_members = table::companydata()->select('gid')->leftjoin('tbl_people','tbl_company_data.reference','=','tbl_people.id')->leftjoin('tbl_asana_users','tbl_asana_users.reference','=','tbl_people.id')->where('department',$department)->where('tbl_people.employmentstatus', 'Active')->get()->toArray();
 	        foreach ($department_members as $value) {
@@ -220,23 +253,62 @@ class PersonalReportsController extends Controller
 		}
 
 		if($profile == "my"){
-	        $parent = table::companydata()->where('reference',$id)->first();
+			if(isset($other)){ // get other user's parent
+				$parent = table::companydata()->where('reference',$other)->first();
+			} else { // get own user's parent
+				$parent = table::companydata()->where('reference',$id)->first();
+			}
+	        
 	        if(isset($parent))
 	        	$parent = $parent->department;
 
-	        $parent_members = table::companydata()->select('gid')->leftjoin('tbl_people','tbl_company_data.reference','=','tbl_people.id')->leftjoin('tbl_asana_users','tbl_asana_users.reference','=','tbl_people.id')->where('department',$parent)->where('tbl_people.employmentstatus', 'Active')->whereNotIn('gid',$user_gid)->get()->toArray();
+	        if(\Auth::user()->role_id == 2) {
+	        	if(isset($u_gid)){
+					$others[$u_gid->reference] = strtoupper($u_gid->name);
+				} else {
+					$others[\Auth::user()->reference] = \Auth::user()->name;
+				}
+	        	
+	        }
+
+	        $parent_members = table::companydata()->select('gid','tbl_company_data.reference as value', DB::raw('concat(tbl_people.firstname, " ", tbl_people.lastname) as name'))->leftjoin('tbl_people','tbl_company_data.reference','=','tbl_people.id')->leftjoin('tbl_asana_users','tbl_asana_users.reference','=','tbl_people.id')->where('department',$parent)->where('tbl_people.employmentstatus', 'Active')->whereNotIn('gid',$user_gid)->get()->toArray();
 	        foreach ($parent_members as $value) {
 	        	if(isset($value->gid)){
 	        		//if($value->gid != $user_gid)
-	        			$parent_members_gid[] = $value->gid;
+	        		if(\Auth::user()->role_id == 2)
+	        			$others[$value->value] = $value->name;
+	        		$parent_members_gid[] = $value->gid;
 	        	}
 	        }
 
         	$parent_members = count($parent_members);
 	    } else {
 	        $parent = table::companydata()->where('reference',$id)->first();
-	        if(isset($parent))
-	        	$parent = $parent->company;
+	        if(isset($parent)){
+
+				if(isset($other)){ // get other department's parent
+					$dept = table::department()->select('tbl_form_department.department as department','tbl_form_company.company as company')->leftjoin('tbl_form_company','tbl_form_company.id','=','tbl_form_department.comp_code')->where("tbl_form_department.id", $other)->first();
+	        		$parent = $dept->company;
+					$dept = $dept->department;
+				} else { // get own department's parent
+					$dept = $parent->department;
+	        		$parent = $parent->company;
+				}
+
+	        	//get own dept
+	        	$dept = table::department()->select('tbl_form_department.id as value','tbl_form_department.department as name')->where("tbl_form_department.department", $dept)->get()->toArray();
+	        	foreach ($dept as $value) {
+		        	if(\Auth::user()->role_id == 2)
+		        		$others[$value->value] = $value->name;
+		        }
+
+		        //get other deptx
+	        	$dept = table::department()->select('tbl_form_department.id as value','tbl_form_department.department as name')->leftjoin('tbl_form_company','tbl_form_company.id','=','tbl_form_department.comp_code')->where("tbl_form_company.company", $parent)->get()->toArray();
+	        	foreach ($dept as $value) {
+		        	if(\Auth::user()->role_id == 2)
+		        		$others[$value->value] = $value->name;
+		        }
+	        }
 
 	        $parent_members = table::companydata()->select('gid')->leftjoin('tbl_people','tbl_company_data.reference','=','tbl_people.id')->leftjoin('tbl_asana_users','tbl_asana_users.reference','=','tbl_people.id')->where('company',$parent)->where('tbl_people.employmentstatus', 'Active')->whereNotIn('gid',$user_gid)->get()->toArray();
 	        foreach ($parent_members as $value) {
@@ -461,6 +533,7 @@ class PersonalReportsController extends Controller
 
 		return view('personal.reports.report-asana-task', 
 			compact(
+				'others', 'mine',
 				'orgProfile', 'gc', 'dgc', 'cg', 'csc',
 		 		'ct','ctpdata','ctddata','ctpdata_avg','ctddata_avg',
 		 		'co','copdata','coddata','copdata_avg','coddata_avg',
