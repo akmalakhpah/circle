@@ -68,6 +68,34 @@
                             </td>
                         </tr>
                         @endif
+                                        
+                        @if($setting->enable_asana_report)
+                        <tr>
+                            <td><a href="{{ url('reports/asana-task/my') }}"><i class="ui icon font"></i> Staff Asana Tasks Report</a></td>
+                            <td class="odd">
+                                @isset($lastviews)
+                                @foreach ($lastviews as $views)
+                                    @if($views->report_id == 8)
+                                       {{ $views->last_viewed }}
+                                    @endif
+                                @endforeach
+                                @endisset
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><a href="{{ url('reports/asana-task/department') }}"><i class="ui icon font"></i> Department Asana Tasks Report</a></td>
+                            <td class="odd">
+                                @isset($lastviews)
+                                @foreach ($lastviews as $views)
+                                    @if($views->report_id == 9)
+                                       {{ $views->last_viewed }}
+                                    @endif
+                                @endforeach
+                                @endisset
+                            </td>
+                        </tr>
+                        @endif
+
                         <tr>
                             <td><a href="{{ url('reports/organization-profile') }}"><i class="ui icon building"></i> Organization Demographic</a></td>
                             <td class="odd">

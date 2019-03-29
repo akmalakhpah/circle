@@ -162,6 +162,8 @@ Route::group(['middleware' => 'auth'], function () {
 			Route::get('reports/organization-profile', 'admin\ReportsController@orgProfile');
 			Route::get('reports/employee-birthdays', 'admin\ReportsController@empBday');
 			Route::get('reports/user-accounts', 'admin\ReportsController@userAccs');
+			Route::get('reports/asana-task/{profile}', 'admin\ReportsController@asanaTask');
+			Route::post('reports/asana-task/{profile}', 'admin\ReportsController@asanaTask');
 			Route::get('get/employee-attendance', 'admin\ReportsController@getEmpAtten');
 			Route::get('get/employee-leaves', 'admin\ReportsController@getEmpLeav');
 			Route::get('get/employee-schedules', 'admin\ReportsController@getEmpSched');

@@ -28,7 +28,7 @@ class PersonalReportsController extends Controller
 
 	public function empList() {
 		$today = date('M, d Y');
-		table::reportviews()->where('report_id', 1)->update(['last_viewed' => $today]);
+		//table::reportviews()->where('report_id', 1)->update(['last_viewed' => $today]);
 
 		$empList = table::people()->join('tbl_company_data', 'tbl_people.id', '=', 'tbl_company_data.reference')->get();
 		
@@ -37,7 +37,7 @@ class PersonalReportsController extends Controller
 
 	public function empAtten() {
 		$today = date('M, d Y');
-		table::reportviews()->where('report_id', 2)->update(array('last_viewed' => $today));
+		//table::reportviews()->where('report_id', 2)->update(array('last_viewed' => $today));
 
 		$empAtten = table::attendance()->get();
 		$employee = table::people()->join('tbl_company_data', 'tbl_people.id', '=', 'tbl_company_data.reference')->where('tbl_people.employmentstatus', 'Active')->get();
@@ -56,7 +56,7 @@ class PersonalReportsController extends Controller
 
 	public function empSched() {
 		$today = date('M, d Y');
-		table::reportviews()->where('report_id', 4)->update(array('last_viewed' => $today));
+		//table::reportviews()->where('report_id', 4)->update(array('last_viewed' => $today));
 
 		$empSched = table::schedules()->orderBy('archive', 'ASC')->get();
 		$employee = table::people()->join('tbl_company_data', 'tbl_people.id', '=', 'tbl_company_data.reference')->where('tbl_people.employmentstatus', 'Active')->get();
@@ -65,7 +65,7 @@ class PersonalReportsController extends Controller
 
 	public function orgProfile() {
 		$today = date('M, d Y');
-		table::reportviews()->where('report_id', 5)->update(array('last_viewed' => $today));
+		//table::reportviews()->where('report_id', 5)->update(array('last_viewed' => $today));
 
 		$ed = table::people()->join('tbl_company_data', 'tbl_people.id', '=', 'tbl_company_data.reference')->where('tbl_people.employmentstatus', 'Active')->orderBy('tbl_company_data.company')->orderBy('tbl_company_data.department')->get();
 		
@@ -119,7 +119,7 @@ class PersonalReportsController extends Controller
 
 	public function empBday() {
 		$today = date('M, d Y');
-		table::reportviews()->where('report_id', 7)->update(['last_viewed' => $today]);
+		//table::reportviews()->where('report_id', 7)->update(['last_viewed' => $today]);
 
 		$empBday = table::people()->join('tbl_company_data', 'tbl_people.id', '=', 'tbl_company_data.reference')->get();
 		return view('personal.reports.report-employee-birthdays', compact('empBday'));
@@ -127,7 +127,7 @@ class PersonalReportsController extends Controller
 
 	public function userAccs() {
 		$today = date('M, d Y');
-		table::reportviews()->where('report_id', 6)->update(['last_viewed' => $today]);
+		//table::reportviews()->where('report_id', 6)->update(['last_viewed' => $today]);
 
 		$userAccs = table::users()->get();
 		return view('personal.reports.report-user-accounts', compact('userAccs'));
@@ -482,10 +482,14 @@ class PersonalReportsController extends Controller
 		$copdata = implode($copdata, ', ') . ',';
 		$coddata = implode($coddata, ', ') . ',';
 
-		$ctpdata_avg = $ctpdata_avg / count($ct);
-		$ctddata_avg = $ctddata_avg / count($ct);
-		$copdata_avg = $copdata_avg / count($ct);
-		$coddata_avg = $coddata_avg / count($ct);
+		$ctTotal = count($ct);
+		if($ctTotal < 1)
+			$ctTotal = 1;
+
+		$ctpdata_avg = $ctpdata_avg / $ctTotal;
+		$ctddata_avg = $ctddata_avg / $ctTotal;
+		$copdata_avg = $copdata_avg / $ctTotal;
+		$coddata_avg = $coddata_avg / $ctTotal;
 
 		$orgProfile = table::companydata()->get();
 
